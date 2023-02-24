@@ -1,0 +1,27 @@
+ID	ProcessClass_ID	Equipment_ID	SignalName	TagAddress	ValueType	Direction	Description	LastSaved	ConfiguredBy
+1	13	150	ReqToDownload	NULL	BIT	OUT	RH => PLC, Request to download new recipe command.	2022-04-14 12:34:13.027	TPMDB
+2	13	150	ReqToDelete	NULL	BIT	OUT	RH => PLC, Request to delete queued recipe command.	2022-04-14 12:34:13.027	TPMDB
+3	13	150	AckToDeletePLC	NULL	BIT	OUT	RH => PLC, Acknowledgement on delete command from PLC.	2022-04-14 12:34:13.027	TPMDB
+4	13	150	AckToAbortPLC	NULL	BIT	OUT	RH => PLC, Acknowledgement on abort command from PLC.	2022-04-14 12:34:13.027	TPMDB
+5	13	150	AckExecStarted	NULL	BIT	OUT	RH => PLC, Acknowledgement on ExecStarted command from PLC.	2022-04-14 12:34:13.027	TPMDB
+6	13	150	AckExecCompleted	NULL	BIT	OUT	RH => PLC, Acknowledgement on ExecCompleted command from PLC.	2022-04-14 12:34:13.027	TPMDB
+7	13	150	OK_ToDownload	NULL	BIT	IN	PLC => RH, Ok to send down a new recipe in queue.	2022-04-14 12:34:13.027	TPMDB
+8	13	150	ExecStarted	NULL	BIT	IN	PLC => RH, Batch in queue is now active. Change RM status to running.	2022-04-14 12:34:13.027	TPMDB
+9	13	150	ExecCompleted	NULL	BIT	IN	PLC => RH, Running batch is completed. Change RM status to complete.	2022-04-14 12:34:13.027	TPMDB
+10	13	150	ReqToDeletePLC	NULL	BIT	IN	PLC => RH, Request from PLC to delete the recipe in queue.	2022-04-14 12:34:13.027	TPMDB
+11	13	150	ReqToAbortPLC	NULL	BIT	IN	PLC => RH, Request from PLC to abort the active recipe.	2022-04-14 12:34:13.027	TPMDB
+12	13	150	AckDelete	NULL	BIT	IN	PLC => RH, Acknowledge on delete command from RM.	2022-04-14 12:34:13.027	TPMDB
+13	13	150	NotAckDelete	NULL	BIT	IN	PLC => RH, Delete command from RM was rejected.	2022-04-14 12:34:13.027	TPMDB
+14	13	155	ReqToDownload	NULL	BIT	OUT	RH => PLC, Request to download new recipe command.	2022-04-14 12:34:13.027	TPMDB
+15	13	155	ReqToDelete	NULL	BIT	OUT	RH => PLC, Request to delete queued recipe command.	2022-04-14 12:34:13.027	TPMDB
+16	13	155	AckToDeletePLC	NULL	BIT	OUT	RH => PLC, Acknowledgement on delete command from PLC.	2022-04-14 12:34:13.027	TPMDB
+17	13	155	AckToAbortPLC	NULL	BIT	OUT	RH => PLC, Acknowledgement on abort command from PLC.	2022-04-14 12:34:13.027	TPMDB
+18	13	155	AckExecStarted	NULL	BIT	OUT	RH => PLC, Acknowledgement on ExecStarted command from PLC.	2022-04-14 12:34:13.027	TPMDB
+19	13	155	AckExecCompleted	NULL	BIT	OUT	RH => PLC, Acknowledgement on ExecCompleted command from PLC.	2022-04-14 12:34:13.027	TPMDB
+20	13	155	OK_ToDownload	NULL	BIT	IN	PLC => RH, Ok to send down a new recipe in queue.	2022-04-14 12:34:13.027	TPMDB
+21	13	155	ExecStarted	NULL	BIT	IN	PLC => RH, Batch in queue is now active. Change RM status to running.	2022-04-14 12:34:13.027	TPMDB
+22	13	155	ExecCompleted	NULL	BIT	IN	PLC => RH, Running batch is completed. Change RM status to complete.	2022-04-14 12:34:13.027	TPMDB
+23	13	155	ReqToDeletePLC	NULL	BIT	IN	PLC => RH, Request from PLC to delete the recipe in queue.	2022-04-14 12:34:13.027	TPMDB
+24	13	155	ReqToAbortPLC	NULL	BIT	IN	PLC => RH, Request from PLC to abort the active recipe.	2022-04-14 12:34:13.027	TPMDB
+25	13	155	AckDelete	NULL	BIT	IN	PLC => RH, Acknowledge on delete command from RM.	2022-04-14 12:34:13.027	TPMDB
+26	13	155	NotAckDelete	NULL	BIT	IN	PLC => RH, Delete command from RM was rejected.	2022-04-14 12:34:13.027	TPMDB

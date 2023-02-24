@@ -1,0 +1,11 @@
+ID	Name
+1	► Run Phase
+2	► Start Phase
+3	■ End Phase
+4	√ Check Phase
+5	▼ Download Parameters
+6	≡ Transition
+7	☺ Operator Confirmation
+8	● Allocate Unit
+9	○ Deallocate Unit
+10	→ Jump

@@ -1,0 +1,41 @@
+ID	Name	DataType
+1	Material Amount	REAL
+3	Phase Mode	DINT
+4	Equipment Mode	DINT
+5	Speed	REAL
+6	Level	REAL
+7	Temperature	REAL
+8	Flow	REAL
+9	Seconds	DINT
+10	Pressure	REAL
+11	Enable Calculation	BOOL
+12	User Real 1	REAL
+13	User Real 2	REAL
+14	User Real 3	REAL
+15	User Real 4	REAL
+16	User Real 5	REAL
+17	User Real 6	REAL
+18	User Real 7	REAL
+19	User Real 8	REAL
+20	User Real 9	REAL
+21	User Real 10	REAL
+22	User DINT 1	DINT
+23	User DINT 2	DINT
+24	User DINT 3	DINT
+25	User DINT 4	DINT
+26	User DINT 5	DINT
+27	User DINT 6	DINT
+28	User DINT 7	DINT
+29	User DINT 8	DINT
+30	User DINT 9	DINT
+31	User DINT 10	DINT
+32	User BOOL 1	BOOL
+33	User BOOL 2	BOOL
+34	User BOOL 3	BOOL
+35	User BOOL 4	BOOL
+36	User BOOL 5	BOOL
+37	User BOOL 6	BOOL
+38	User BOOL 7	BOOL
+39	User BOOL 8	BOOL
+40	User BOOL 9	BOOL
+41	User BOOL 10	BOOL

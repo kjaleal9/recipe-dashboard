@@ -1,0 +1,1 @@
+insert into public."MaterialClass" ("ID","Name","Description","ReferenceName","LastSaved","ConfiguredBy") VALUES 
