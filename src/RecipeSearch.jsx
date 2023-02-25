@@ -40,10 +40,12 @@ const RecipeSearch = props => {
   const [openSnackBar, setOpenSnackbar] = useState(false);
   const [snackPack, setSnackPack] = React.useState([]);
   const [messageInfo, setMessageInfo] = React.useState(undefined);
-  const [mode, setMode] = useState('Search');
+  const [mode, setMode] = useState('Procedure');
+  const [search, setSearch] = useState('');
+  const [checked, setChecked] = React.useState(false);
 
   const refreshTable = () => {
-    if (mode === 'Search') {
+    if (mode === 'Search' || mode === 'Procedure') {
       console.time('Get all data');
       const getRecipes = () =>
         fetch('http://localhost:5000/recipes').then(response =>
@@ -159,12 +161,32 @@ const RecipeSearch = props => {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
+  const handleSearch = event => {
+    if (!checked) {
+      const filteredRows = latestVersion.filter(row =>
+        row.RID.toLowerCase().includes(event.target.value.toLowerCase())
+      );
+      console.log(filteredRows);
+      setRows(filteredRows);
+    } else {
+      console.log(checked);
+      const filteredRows = fullDatabase.filter(row =>
+        row.RID.toLowerCase().includes(event.target.value.toLowerCase())
+      );
+      console.log(filteredRows);
+      setRows(filteredRows);
+    }
+  };
+
   return (
     <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%', mb: 2 }}>
+      <Paper sx={{ height: '88vh', width: '100%', mb: 2 }}>
         {latestVersion.length > 0 ? (
           mode === 'Procedure' ? (
-            <RecipeProcedure />
+            <RecipeProcedure
+              materials={materials}
+              materialClasses={materialClasses}
+            />
           ) : (
             <Box>
               <EnhancedTableToolbar
@@ -175,6 +197,9 @@ const RecipeSearch = props => {
                 selected={selected}
                 setSelected={setSelected}
                 handleDelete={handleDelete}
+                handleSearch={handleSearch}
+                checked={checked}
+                setChecked={setChecked}
               />
               <EnhancedModal
                 open={openNewModal}
@@ -302,7 +327,7 @@ const RecipeSearch = props => {
             <Skeleton variant='rectangular' width={210} height={118} />
             <Typography>LOADING</Typography>
           </Box>
-        )}
+        )}{' '}
       </Paper>
     </Box>
   );

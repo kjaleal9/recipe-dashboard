@@ -28,8 +28,11 @@ const EnhancedTableToolbar = props => {
     setSelected,
     rows,
     handleDelete,
+    handleSearch,
+    checked,
+    setChecked
   } = props;
-  const [checked, setChecked] = React.useState(true);
+
 
   const handleChange = event => {
     setChecked(event.target.checked);
@@ -58,6 +61,7 @@ const EnhancedTableToolbar = props => {
         <Input
           id='standard-adornment-password'
           type='text'
+          onChange={event => handleSearch(event)}
           endAdornment={
             <InputAdornment position='end'>
               <IconButton
