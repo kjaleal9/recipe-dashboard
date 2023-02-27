@@ -180,7 +180,7 @@ const RecipeSearch = props => {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Paper sx={{ height: '88vh', width: '100%', mb: 2 }}>
+      <Paper sx={{ height: '90vh', width: '100%', mb: 2 }}>
         {latestVersion.length > 0 ? (
           mode === 'Procedure' ? (
             <RecipeProcedure
