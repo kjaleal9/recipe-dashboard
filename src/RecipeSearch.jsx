@@ -48,30 +48,30 @@ const RecipeSearch = props => {
     if (mode === 'Search' || mode === 'Procedure') {
       console.time('Get all data');
       const getRecipes = () =>
-        fetch('http://localhost:5000/recipes').then(response =>
+        fetch('http://192.168.1.24:5000/recipes').then(response =>
           response.json()
         );
 
       const getLatestRecipes = () =>
-        fetch('http://localhost:5000/recipes/latest').then(response =>
+        fetch('http://192.168.1.24:5000/recipes/latest').then(response =>
           response.json()
         );
 
       const getMaterials = () =>
-        fetch('http://localhost:5000/materials').then(response =>
+        fetch('http://192.168.1.24:5000/materials').then(response =>
           response.json()
         );
 
       const getMaterialClasses = () =>
-        fetch('http://localhost:5000/material-classes').then(response =>
+        fetch('http://192.168.1.24:5000/material-classes').then(response =>
           response.json()
         );
       const getProcessClasses = () =>
-        fetch('http://localhost:5000/process-classes').then(response =>
+        fetch('http://192.168.1.24:5000/process-classes').then(response =>
           response.json()
         );
       const getRequiredProcessClasses = () =>
-        fetch('http://localhost:5000/process-classes/required').then(response =>
+        fetch('http://192.168.1.24:5000/process-classes/required').then(response =>
           response.json()
         );
 
