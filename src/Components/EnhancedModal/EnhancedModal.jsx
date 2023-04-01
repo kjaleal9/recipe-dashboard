@@ -17,7 +17,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import EditIcon from '@mui/icons-material/Edit';
 import CancelIcon from '@mui/icons-material/Cancel';
 
-import TransferList from './TransferList';
+import TransferList from '../TransferList/TransferList';
 
 const EnhancedModal = props => {
   const {
