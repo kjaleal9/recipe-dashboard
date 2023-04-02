@@ -17,8 +17,7 @@ import SaveIcon from "@mui/icons-material/Save";
 import EditIcon from "@mui/icons-material/Edit";
 import CancelIcon from "@mui/icons-material/Cancel";
 
-import TransferList from "../TransferList/TransferList";
-import { useNavigate } from "react-router-dom";
+import TransferList from "../Components/TransferList/TransferList";
 
 const EnhancedModal = (props) => {
   const {
@@ -55,6 +54,15 @@ const EnhancedModal = (props) => {
 
   function initializeView() {
     console.time("Initialize View");
+    const getMaterials = () =>
+      fetch("/materials").then((response) => response.json());
+    const getMaterialClasses = () =>
+      fetch("/material-classes").then((response) => response.json());
+    const getProcessClasses = () =>
+      fetch("/process-classes").then((response) => response.json());
+    const getRequiredProcessClasses = () =>
+      fetch("/process-classes/required").then((response) => response.json());
+
     if (mode === "View" || mode === "Copy") {
       setRID(selected.RID);
       setVersion(selected.Version);
@@ -124,12 +132,6 @@ const EnhancedModal = (props) => {
     setChecked([value]);
   };
 
-  const navigate = useNavigate();
-
-  const handleEdit = (event, selected) => {
-    navigate(`${selected.RID}/${selected.Version}/edit`);
-    setMode("Edit");
-  };
   const handleButtonCancel = () => {
     if (mode === "Edit") {
       setRID(selected.RID);
@@ -220,7 +222,6 @@ const EnhancedModal = (props) => {
             {mode} Recipe{" "}
             {mode !== "New" && mode !== "Copy" && `- ${selected.RID}`}
           </Typography>
-
           {(mode === "View" || mode === "Edit") && (
             <Box sx={{}}>
               {/* <Typography
@@ -281,9 +282,7 @@ const EnhancedModal = (props) => {
             </Box>
           )}
         </Box>
-
         <Divider sx={{ mb: 2, mt: 2 }} />
-
         <Box>
           <Box sx={{ display: "flex" }}>
             <Box
@@ -339,7 +338,6 @@ const EnhancedModal = (props) => {
                   >
                     Recipe Information
                   </Typography>
-
                   <TextField
                     id="RID"
                     label="Recipe ID"
@@ -497,39 +495,24 @@ const EnhancedModal = (props) => {
                   </Box>
                 </Box>
               )}
-
               <Box>
                 <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                  {mode === "View" ? (
-                    <Button
-                      variant="contained"
-                      color="secondary"
-                      endIcon={<EditIcon />}
-                      onClick={(event) => handleEdit(event, selected)}
-                      sx={{ width: "45%" }}
-                    >
-                      Edit
-                    </Button>
-                  ) : (
-                    <Button
-                      variant="contained"
-                      endIcon={<SaveIcon />}
-                      onClick={handleButtonSubmit}
-                      sx={{ width: "45%" }}
-                    >
-                      Save
-                    </Button>
-                  )}
-                  {(mode === "Edit" || mode === "Copy") && (
-                    <Button
-                      variant="contained"
-                      endIcon={<CancelIcon />}
-                      onClick={handleButtonCancel}
-                      sx={{ width: "45%" }}
-                    >
-                      Cancel
-                    </Button>
-                  )}
+                  <Button
+                    variant="contained"
+                    endIcon={<SaveIcon />}
+                    onClick={handleButtonSubmit}
+                    sx={{ width: "45%" }}
+                  >
+                    Save
+                  </Button>
+                  <Button
+                    variant="contained"
+                    endIcon={<CancelIcon />}
+                    onClick={handleButtonCancel}
+                    sx={{ width: "45%" }}
+                  >
+                    Cancel
+                  </Button>
                 </Box>
               </Box>
             </Box>

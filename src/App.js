@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Outlet, Link } from "react-router-dom";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiDrawer from "@mui/material/Drawer";
@@ -12,12 +13,11 @@ import IconButton from "@mui/material/IconButton";
 import Badge from "@mui/material/Badge";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import Link from "@mui/material/Link";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { mainListItems, secondaryListItems } from "./ListItems";
-import RecipeSearch from "./Routes/RecipeSearch";
+
 
 const drawerWidth = 240;
 
@@ -151,7 +151,7 @@ function App() {
           <Container maxWidth="xlg" sx={{ mt: 2, mb: 2 }}>
             <Grid container spacing={3}>
               <Grid item xs={12}>
-                <RecipeSearch />
+                <Outlet />
               </Grid>
             </Grid>
           </Container>
