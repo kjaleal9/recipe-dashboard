@@ -14,21 +14,18 @@ const headCells = [
     numeric: false,
     disablePadding: false,
     label: "RID",
-    width: "50px",
   },
   {
     id: "Version",
     numeric: true,
     disablePadding: false,
     label: "Ver",
-    width: "50px",
   },
   {
     id: "VersionDate",
     type: Date,
     disablePadding: false,
     label: "Date",
-    width: "50px",
   },
   // {
   //   id: 'RecipeType',
@@ -53,7 +50,6 @@ const headCells = [
     numeric: true,
     disablePadding: false,
     label: "Product ID",
-    width: "75px",
   },
   {
     id: "Name",

@@ -1,23 +1,19 @@
 import React from "react";
-import PropTypes from "prop-types";
 
-import Button from "@mui/material/Button";
-import ButtonGroup from "@mui/material/ButtonGroup";
-import IconButton from "@mui/material/IconButton";
-import InputAdornment from "@mui/material/InputAdornment";
-import SearchIcon from "@mui/icons-material/Search";
-import Toolbar from "@mui/material/Toolbar";
-import ToggleButton from "@mui/material/ToggleButton";
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import {
+  Button,
+  ButtonGroup,
+  IconButton,
+  InputAdornment,
   Box,
   Input,
   FormControl,
   InputLabel,
   Switch,
-  FormGroup,
   FormControlLabel,
+  Toolbar,
   Tooltip,
+  ToggleButtonGroup,
 } from "@mui/material";
 
 import AddBoxIcon from "@mui/icons-material/AddBox";
@@ -26,56 +22,27 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import GppBadIcon from "@mui/icons-material/GppBad";
+import SearchIcon from "@mui/icons-material/Search";
 
-const EnhancedTableToolbar = (props) => {
-  const [status, setStatus] = React.useState("web");
+import TooltipToggleButton from "../TooltipToggleButton/TooltipToggleButton";
 
-  const handleStatusChange = (event, statusFilter) => {
-    const statusFilters = {
-      approved: () =>
-        setFilter({
-          ...filter,
-          approved: true,
-          registered: false,
-          obsolete: false,
-        }),
-      registered: () =>
-        setFilter({
-          ...filter,
-          registered: true,
-          approved: false,
-          obsolete: false,
-        }),
-      obsolete: () =>
-        setFilter({
-          ...filter,
-          obsolete: true,
-          approved: false,
-          registered: false,
-        }),
-    };
-    if (statusFilters[statusFilter]) {
-      statusFilters[statusFilter]();
-    } else {
-      setFilter({
-        ...filter,
-        approved: false,
-        registered: false,
-        obsolete: false,
-      });
-    }
-    setStatus(statusFilter);
+const EnhancedTableToolbar = ({
+  anyRowSelected,
+  setMode,
+  setOpen,
+  handleDelete,
+  setPage,
+  filter,
+  setFilter,
+}) => {
+  const [status, setStatus] = React.useState("");
+
+  const handleStatusChange = (event, value) => {
+    value
+      ? setFilter({ ...filter, status: value })
+      : setFilter({ ...filter, status: "" });
+    setStatus(value);
   };
-  const {
-    anyRowSelected,
-    setMode,
-    setOpen,
-    handleDelete,
-    handleSearch,
-    setPage,
-    filter,
-    setFilter,
-  } = props;
 
   const handleShowAllChange = (event) => {
     setFilter({ ...filter, showAll: event.target.checked });
@@ -85,6 +52,10 @@ const EnhancedTableToolbar = (props) => {
   const handleOpen = (mode) => {
     setMode(mode);
     setOpen(true);
+  };
+
+  const handleSearch = (event) => {
+    setFilter({ ...filter, search: event.target.value.toLowerCase() });
   };
 
   return (
@@ -116,7 +87,6 @@ const EnhancedTableToolbar = (props) => {
           }
         />
       </FormControl>
-
       <Box sx={{ display: "flex" }}>
         <Tooltip title="Show All Versions">
           <FormControlLabel
@@ -134,48 +104,63 @@ const EnhancedTableToolbar = (props) => {
           value={status}
           exclusive
           onChange={handleStatusChange}
-          aria-label="Platform"
+          aria-label="Recipe Status Filter"
         >
-          <ToggleButton value="approved">
-            <Tooltip title="Show Approved">
-              <VerifiedIcon />
-            </Tooltip>
-          </ToggleButton>
-          <ToggleButton value="registered">
-            <Tooltip title="Show Registered">
-              <InventoryIcon />
-            </Tooltip>
-          </ToggleButton>
-          <ToggleButton value="obsolete">
-            <Tooltip title="Show Obsolete">
-              <GppBadIcon />
-            </Tooltip>
-          </ToggleButton>
+          <TooltipToggleButton
+            children={<VerifiedIcon />}
+            title={"Show Approved"}
+            value="Approved"
+            variant="contained"
+          />
+          <TooltipToggleButton
+            children={<InventoryIcon />}
+            title={"Show Registered"}
+            value="Registered"
+            variant="contained"
+          />
+          <TooltipToggleButton
+            children={<GppBadIcon />}
+            title={"Show Obsolete"}
+            value="Obsolete"
+            variant="contained"
+          />
         </ToggleButtonGroup>
 
         <ButtonGroup color="primary" sx={{ mx: 2 }}>
           <Tooltip title="New">
-            <Button variant="contained" onClick={() => handleOpen("New")}>
-              <AddBoxIcon />
-            </Button>
+            <Box>
+              <Button
+                variant="contained"
+                onClick={() => handleOpen("New")}
+                sx={{ height: "100%" }}
+              >
+                <AddBoxIcon />
+              </Button>
+            </Box>
           </Tooltip>
           <Tooltip title="Copy">
-            <Button
-              variant="contained"
-              onClick={() => handleOpen("Copy")}
-              disabled={!anyRowSelected}
-            >
-              <ContentCopyIcon />
-            </Button>
+            <Box>
+              <Button
+                variant="contained"
+                onClick={() => handleOpen("Copy")}
+                disabled={!anyRowSelected}
+                sx={{ height: "100%" }}
+              >
+                <ContentCopyIcon />
+              </Button>
+            </Box>
           </Tooltip>
           <Tooltip title="Delete">
-            <Button
-              variant="contained"
-              disabled={!anyRowSelected}
-              onClick={handleDelete}
-            >
-              <DeleteIcon />
-            </Button>
+            <Box>
+              <Button
+                variant="contained"
+                disabled={!anyRowSelected}
+                onClick={handleDelete}
+                sx={{ height: "100%" }}
+              >
+                <DeleteIcon />
+              </Button>
+            </Box>
           </Tooltip>
         </ButtonGroup>
         <ButtonGroup color="secondary" sx={{ mr: 2 }}>
@@ -185,10 +170,6 @@ const EnhancedTableToolbar = (props) => {
       </Box>
     </Toolbar>
   );
-};
-
-EnhancedTableToolbar.propTypes = {
-  anyRowSelected: PropTypes.bool.isRequired,
 };
 
 export default EnhancedTableToolbar;
