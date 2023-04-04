@@ -42,6 +42,7 @@ const EnhancedTableToolbar = ({
       ? setFilter({ ...filter, status: value })
       : setFilter({ ...filter, status: "" });
     setStatus(value);
+    setPage(0);
   };
 
   const handleShowAllChange = (event) => {

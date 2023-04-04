@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import {
-  Modal,
+  Grid,
+  Paper,
   Box,
   InputLabel,
   FormControl,
@@ -20,20 +22,11 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import TransferList from "../Components/TransferList/TransferList";
 
 const EnhancedModal = (props) => {
-  const {
-    rows,
-    setOpen,
-    open,
-    mode,
-    setMode,
-    selected,
-    setSelected,
-    materials,
-    materialClasses,
-    processClasses,
-    requiredProcessClasses,
-    refreshTable,
-  } = props;
+  const { rows, setOpen, open, mode, setMode, refreshTable } = props;
+
+  const { ...params } = useParams();
+
+  console.log(params);
 
   const [material, setMaterial] = useState("");
   const [materialClass, setMaterialClass] = useState("");
@@ -51,9 +44,20 @@ const EnhancedModal = (props) => {
   const [version, setVersion] = useState("");
   const [date, setDate] = useState("");
   const [invalidNames, setInvalidNames] = useState([]);
+  const [selected, setSelected] = useState("");
+  const [materials, setMaterials] = useState([]);
+  const [materialClasses, setMaterialClasses] = useState([]);
+  const [processClasses, setProcessClasses] = useState([]);
+  const [requiredProcessClasses, setRequiredProcessClasses] = useState([]);
 
   function initializeView() {
     console.time("Initialize View");
+    const getRecipe = () =>
+      fetch(`/recipes/${params.RID}/${params.version}`)
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+        });
     const getMaterials = () =>
       fetch("/materials").then((response) => response.json());
     const getMaterialClasses = () =>
@@ -63,57 +67,47 @@ const EnhancedModal = (props) => {
     const getRequiredProcessClasses = () =>
       fetch("/process-classes/required").then((response) => response.json());
 
-    if (mode === "View" || mode === "Copy") {
-      setRID(selected.RID);
-      setVersion(selected.Version);
-      setDate(selected.VersionDate);
-      setType(selected.RecipeType);
-      setDescription(selected.Description);
-      setStatus(selected.Status);
-      setBSNom(selected.BatchSizeNominal);
-      setBSMin(selected.BatchSizeMin);
-      setBSMax(selected.BatchSizeMax);
-      setMaterialClass(
-        materialClasses.find(
-          (materialClass) =>
-            materialClass.ID ===
-            materials.find(
-              (material) => material.SiteMaterialAlias === selected.ProductID
-            ).MaterialClass_ID
-        )
-      );
-      setMaterial(
-        materials.find(
-          (material) => material.SiteMaterialAlias === selected.ProductID
-        )
-      );
-    }
-    if (mode === "Copy") {
-      setRID("");
-      setDescription("");
-    }
-    console.log(selected);
     console.timeEnd("Initialize View");
+
+    function getAllData() {
+      return Promise.all([
+        getRecipe(),
+        getMaterials(),
+        getMaterialClasses(),
+        getProcessClasses(),
+        getRequiredProcessClasses(),
+      ]);
+    }
+
+    getAllData().then(
+      ([
+        selectedRecipe,
+        allMaterials,
+        allMaterialClasses,
+        allProcessClasses,
+        allRequiredProcessClasses,
+      ]) => {
+        setSelected(selectedRecipe);
+        setRID(selectedRecipe.RID);
+        setVersion(selectedRecipe.Version);
+        setDate(selectedRecipe.VersionDate);
+        setType(selectedRecipe.RecipeType);
+        setDescription(selectedRecipe.Description);
+        setStatus(selectedRecipe.Status);
+        setBSNom(selectedRecipe.BatchSizeNominal);
+        setBSMin(selectedRecipe.BatchSizeMin);
+        setBSMax(selectedRecipe.BatchSizeMax);
+        setMaterials(allMaterials);
+        setMaterialClasses(allMaterialClasses);
+        setProcessClasses(allProcessClasses);
+        setRequiredProcessClasses(allRequiredProcessClasses);
+      }
+    );
   }
 
   useEffect(() => {
     initializeView();
-  }, [mode]);
-
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: mode === "Copy" ? 425 : 1000,
-    bgcolor: "background.paper",
-    border: "2px solid #000",
-    borderRadius: "20px",
-    boxShadow: 24,
-    p: 4,
-    display: "flex",
-    flexDirection: "column",
-  };
+  }, []);
 
   const handleClose = () => {
     setRID("");
@@ -130,38 +124,6 @@ const EnhancedModal = (props) => {
 
   const handleToggle = (value) => () => {
     setChecked([value]);
-  };
-
-  const handleButtonCancel = () => {
-    if (mode === "Edit") {
-      setRID(selected.RID);
-      setVersion(selected.Version);
-      setDate(selected.VersionDate);
-      setType(selected.RecipeType);
-      setDescription(selected.Description);
-      setStatus(selected.Status);
-      setBSNom(selected.BatchSizeNominal);
-      setBSMin(selected.BatchSizeMin);
-      setBSMax(selected.BatchSizeMax);
-      setMaterialClass(
-        materialClasses.find(
-          (materialClass) =>
-            materialClass.ID ===
-            materials.find(
-              (material) => material.SiteMaterialAlias === selected.ProductID
-            ).MaterialClass_ID
-        )
-      );
-      setMaterial(
-        materials.find(
-          (material) => material.SiteMaterialAlias === selected.ProductID
-        )
-      );
-      setMode("View");
-    }
-    if (mode === "Copy") {
-      handleClose();
-    }
   };
 
   const handleButtonSubmit = () => {
@@ -204,37 +166,26 @@ const EnhancedModal = (props) => {
   };
 
   return (
-    <Modal
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
-      <Box sx={style}>
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography
-            component="h1"
-            variant="h5"
-            color="inherit"
-            noWrap
-            sx={{ flexGrow: 1, alignSelf: "center" }}
-          >
-            {mode} Recipe{" "}
-            {mode !== "New" && mode !== "Copy" && `- ${selected.RID}`}
-          </Typography>
-          {(mode === "View" || mode === "Edit") && (
+    <Grid container spacing={2} sx={{ height: "88vh" }}>
+      <Grid item xs={12}>
+        <Paper sx={{ height: "100%" }}>
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Typography
+              component="h1"
+              variant="h5"
+              color="inherit"
+              noWrap
+              sx={{ flexGrow: 1, alignSelf: "center" }}
+            >
+              Edit Recipe{`- ${selected.RID}`}
+            </Typography>
             <Box sx={{}}>
-              {/* <Typography
-                component='h5'
-                variant='subtitle'
-                color='inherit'
-                noWrap
-                sx={{ alignSelf: 'flex-start' }}
-              >
-                Type: {selected.RecipeType}
-              </Typography> */}
               <Box
-                sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  mb: 1,
+                }}
               >
                 <Typography
                   component="h5"
@@ -280,286 +231,284 @@ const EnhancedModal = (props) => {
                 Date: {new Date(selected.VersionDate).toUTCString()}
               </Typography>
             </Box>
-          )}
-        </Box>
-        <Divider sx={{ mb: 2, mt: 2 }} />
-        <Box>
-          <Box sx={{ display: "flex" }}>
-            <Box
-              sx={{
-                width: 375,
-                mr: 4,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "space-around",
-              }}
-            >
-              {mode === "Copy" ? (
-                <Box>
-                  <TextField
-                    id="RID"
-                    label="New Recipe ID"
-                    value={RID}
-                    error={
-                      !RID || rows.map((recipe) => recipe.RID).includes(RID)
-                    }
-                    type="string"
-                    // helperText={!RID && 'Please enter a valid name'}
-                    InputProps={{
-                      readOnly: mode === "View" ? true : false,
-                    }}
-                    onChange={(event) => {
-                      setRID(event.target.value);
-                    }}
-                    sx={{ mb: 2, width: 350, alignSelf: "center" }}
-                  />
-                  <TextField
-                    id="Description"
-                    label="New Description"
-                    value={description}
-                    type="string"
-                    InputProps={{
-                      readOnly: mode === "View" ? true : false,
-                    }}
-                    onChange={(event) => {
-                      setDescription(event.target.value);
-                    }}
-                    sx={{ mb: 2, width: 350, alignSelf: "center" }}
-                  />
-                </Box>
-              ) : (
-                <Box>
-                  <Typography
-                    component="h5"
-                    variant="h6"
-                    color="inherit"
-                    noWrap
-                    sx={{ mb: 2, alignSelf: "flex-start", ml: 2 }}
-                  >
-                    Recipe Information
-                  </Typography>
-                  <TextField
-                    id="RID"
-                    label="Recipe ID"
-                    value={RID}
-                    error={!RID}
-                    type="string"
-                    // helperText={!RID && 'Please enter a valid name'}
-                    InputProps={{
-                      readOnly: mode === "View" ? true : false,
-                    }}
-                    onChange={(event) => {
-                      setRID(event.target.value);
-                    }}
-                    sx={{ mb: 2, width: 350, alignSelf: "center" }}
-                  />
-                  <TextField
-                    id="Description"
-                    label="Description"
-                    value={description}
-                    type="string"
-                    InputProps={{
-                      readOnly: mode === "View" ? true : false,
-                    }}
-                    onChange={(event) => {
-                      setDescription(event.target.value);
-                    }}
-                    sx={{ mb: 2, width: 350, alignSelf: "center" }}
-                  />
-                  <FormControl sx={{ mb: 2, width: 350, alignSelf: "center" }}>
-                    <InputLabel id="demo-simple-select-helper-label">
-                      Material Class
-                    </InputLabel>
-                    <Select
-                      labelId="material-class-select-helper-label"
-                      id="material-class-select-helper"
-                      value={materialClass}
-                      label="Material Class"
-                      disabled={mode === "View"}
-                      error={!materialClass}
-                      onChange={(event) => {
-                        setMaterialClass(event.target.value);
-                      }}
-                    >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
-                      {materialClasses.map((materialClass) => {
-                        return (
-                          <MenuItem
-                            key={materialClass.ID}
-                            value={materialClass}
-                          >{`${materialClass.Name}`}</MenuItem>
-                        );
-                      })}
-                    </Select>
-                    <FormHelperText></FormHelperText>
-                  </FormControl>
-                  <FormControl sx={{ mb: 2, width: 350, alignSelf: "center" }}>
-                    <InputLabel id="demo-simple-select-helper-label">
-                      Material
-                    </InputLabel>
-                    <Select
-                      labelId="material-select-helper-label"
-                      id="material-select-helper"
-                      value={material}
-                      label="Material"
-                      disabled={mode === "View" || !materialClass}
-                      error={!material}
-                      onChange={(event) => {
-                        setMaterial(event.target.value);
-                      }}
-                    >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
-                      {materials
-                        .filter(
-                          (material) =>
-                            material.MaterialClass_ID === materialClass.ID
-                        )
-                        .map((material) => {
-                          return (
-                            <MenuItem
-                              key={material.ID}
-                              value={material}
-                            >{`${material.SiteMaterialAlias} - ${material.Name}`}</MenuItem>
-                          );
-                        })}
-                    </Select>
-                    <FormHelperText></FormHelperText>
-                  </FormControl>
-                  <Divider sx={{ mb: 2, mt: 2, width: 300 }} />
-                  <Typography
-                    component="h1"
-                    variant="h6"
-                    color="inherit"
-                    noWrap
-                    sx={{ mb: 2, alignSelf: "flex-start", ml: 2 }}
-                  >
-                    Batch Size
-                  </Typography>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-around",
-                      mb: 2,
-                    }}
-                  >
+          </Box>
+          <Divider sx={{ mb: 2, mt: 2 }} />
+          <Box>
+            <Box sx={{ display: "flex" }}>
+              <Box
+                sx={{
+                  width: 375,
+                  mr: 4,
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "space-around",
+                }}
+              >
+                {mode === "Copy" ? (
+                  <Box>
                     <TextField
-                      id="BatchSizeNominal"
-                      label="Nominal"
-                      value={batchSizeNom}
-                      type="number"
-                      InputProps={{
-                        readOnly: mode === "View" ? true : false,
-                      }}
+                      id="RID"
+                      label="New Recipe ID"
+                      value={RID}
                       error={
-                        batchSizeNom > batchSizeMax ||
-                        batchSizeNom < batchSizeMin ||
-                        batchSizeNom === ""
+                        !RID || rows.map((recipe) => recipe.RID).includes(RID)
                       }
+                      type="string"
+                      // helperText={!RID && 'Please enter a valid name'}
+
                       onChange={(event) => {
-                        setBSNom(event.target.value);
+                        setRID(event.target.value);
                       }}
-                      sx={{ mb: 2, width: 100 }}
+                      sx={{ mb: 2, width: 350, alignSelf: "center" }}
                     />
                     <TextField
-                      id="BatchSizeMin"
-                      label="Min"
-                      value={batchSizeMin}
-                      type="number"
-                      error={batchSizeMin > batchSizeMax || batchSizeMin === ""}
+                      id="Description"
+                      label="New Description"
+                      value={description}
+                      type="string"
                       InputProps={{
                         readOnly: mode === "View" ? true : false,
                       }}
                       onChange={(event) => {
-                        setBSMin(event.target.value);
+                        setDescription(event.target.value);
                       }}
-                      sx={{ mb: 2, width: 100 }}
-                    />
-                    <TextField
-                      id="BatchSizeMax"
-                      label="Max"
-                      value={batchSizeMax}
-                      type="number"
-                      error={batchSizeMax === 0 || batchSizeMax === ""}
-                      InputProps={{
-                        readOnly: mode === "View" ? true : false,
-                      }}
-                      onChange={(event) => {
-                        setBSMax(event.target.value);
-                      }}
-                      sx={{ mb: 2, width: 100 }}
+                      sx={{ mb: 2, width: 350, alignSelf: "center" }}
                     />
                   </Box>
-                </Box>
-              )}
-              <Box>
-                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                  <Button
-                    variant="contained"
-                    endIcon={<SaveIcon />}
-                    onClick={handleButtonSubmit}
-                    sx={{ width: "45%" }}
-                  >
-                    Save
-                  </Button>
-                  <Button
-                    variant="contained"
-                    endIcon={<CancelIcon />}
-                    onClick={handleButtonCancel}
-                    sx={{ width: "45%" }}
-                  >
-                    Cancel
-                  </Button>
-                </Box>
-              </Box>
-            </Box>
-            {mode !== "Copy" && (
-              <Box>
-                <Divider orientation="vertical" flexItem sx={{ mr: 2 }} />
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                  }}
-                >
+                ) : (
                   <Box>
+                    <Typography
+                      component="h5"
+                      variant="h6"
+                      color="inherit"
+                      noWrap
+                      sx={{ mb: 2, alignSelf: "flex-start", ml: 2 }}
+                    >
+                      Recipe Information
+                    </Typography>
+                    <TextField
+                      id="RID"
+                      label="Recipe ID"
+                      value={RID}
+                      error={!RID}
+                      type="string"
+                      // helperText={!RID && 'Please enter a valid name'}
+                      InputProps={{
+                        readOnly: mode === "View" ? true : false,
+                      }}
+                      onChange={(event) => {
+                        setRID(event.target.value);
+                      }}
+                      sx={{ mb: 2, width: 350, alignSelf: "center" }}
+                    />
+                    <TextField
+                      id="Description"
+                      label="Description"
+                      value={description}
+                      type="string"
+                      InputProps={{
+                        readOnly: mode === "View" ? true : false,
+                      }}
+                      onChange={(event) => {
+                        setDescription(event.target.value);
+                      }}
+                      sx={{ mb: 2, width: 350, alignSelf: "center" }}
+                    />
+                    <FormControl
+                      sx={{ mb: 2, width: 350, alignSelf: "center" }}
+                    >
+                      <InputLabel id="demo-simple-select-helper-label">
+                        Material Class
+                      </InputLabel>
+                      <Select
+                        labelId="material-class-select-helper-label"
+                        id="material-class-select-helper"
+                        value={materialClass}
+                        label="Material Class"
+                        disabled={mode === "View"}
+                        error={!materialClass}
+                        onChange={(event) => {
+                          setMaterialClass(event.target.value);
+                        }}
+                      >
+                        <MenuItem value="">
+                          <em>None</em>
+                        </MenuItem>
+                        {materialClasses.map((materialClass) => {
+                          return (
+                            <MenuItem
+                              key={materialClass.ID}
+                              value={materialClass}
+                            >{`${materialClass.Name}`}</MenuItem>
+                          );
+                        })}
+                      </Select>
+                      <FormHelperText></FormHelperText>
+                    </FormControl>
+                    <FormControl
+                      sx={{ mb: 2, width: 350, alignSelf: "center" }}
+                    >
+                      <InputLabel id="demo-simple-select-helper-label">
+                        Material
+                      </InputLabel>
+                      <Select
+                        labelId="material-select-helper-label"
+                        id="material-select-helper"
+                        value={material}
+                        label="Material"
+                        disabled={mode === "View" || !materialClass}
+                        error={!material}
+                        onChange={(event) => {
+                          setMaterial(event.target.value);
+                        }}
+                      >
+                        <MenuItem value="">
+                          <em>None</em>
+                        </MenuItem>
+                        {materials
+                          .filter(
+                            (material) =>
+                              material.MaterialClass_ID === materialClass.ID
+                          )
+                          .map((material) => {
+                            return (
+                              <MenuItem
+                                key={material.ID}
+                                value={material}
+                              >{`${material.SiteMaterialAlias} - ${material.Name}`}</MenuItem>
+                            );
+                          })}
+                      </Select>
+                      <FormHelperText></FormHelperText>
+                    </FormControl>
+                    <Divider sx={{ mb: 2, mt: 2, width: 300 }} />
                     <Typography
                       component="h1"
                       variant="h6"
                       color="inherit"
                       noWrap
-                      sx={{ ml: 4, mb: 2.8 }}
+                      sx={{ mb: 2, alignSelf: "flex-start", ml: 2 }}
                     >
-                      Process Class Requirement
+                      Batch Size
                     </Typography>
-                    <Box sx={{ mb: 3 }}>
-                      <TransferList
-                        setChecked={setChecked}
-                        setLeft={setLeft}
-                        setRight={setRight}
-                        handleToggle={handleToggle}
-                        processClasses={processClasses}
-                        requiredProcessClasses={requiredProcessClasses}
-                        left={left}
-                        right={right}
-                        checked={checked}
-                        mode={mode}
-                        selected={selected}
-                        setMainProcessClass={setMainProcessClass}
-                        mainProcessClass={mainProcessClass}
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-around",
+                        mb: 2,
+                      }}
+                    >
+                      <TextField
+                        id="BatchSizeNominal"
+                        label="Nominal"
+                        value={batchSizeNom}
+                        type="number"
+                        InputProps={{
+                          readOnly: mode === "View" ? true : false,
+                        }}
+                        error={
+                          batchSizeNom > batchSizeMax ||
+                          batchSizeNom < batchSizeMin ||
+                          batchSizeNom === ""
+                        }
+                        onChange={(event) => {
+                          setBSNom(event.target.value);
+                        }}
+                        sx={{ mb: 2, width: 100 }}
+                      />
+                      <TextField
+                        id="BatchSizeMin"
+                        label="Min"
+                        value={batchSizeMin}
+                        type="number"
+                        error={
+                          batchSizeMin > batchSizeMax || batchSizeMin === ""
+                        }
+                        InputProps={{
+                          readOnly: mode === "View" ? true : false,
+                        }}
+                        onChange={(event) => {
+                          setBSMin(event.target.value);
+                        }}
+                        sx={{ mb: 2, width: 100 }}
+                      />
+                      <TextField
+                        id="BatchSizeMax"
+                        label="Max"
+                        value={batchSizeMax}
+                        type="number"
+                        error={batchSizeMax === 0 || batchSizeMax === ""}
+                        InputProps={{
+                          readOnly: mode === "View" ? true : false,
+                        }}
+                        onChange={(event) => {
+                          setBSMax(event.target.value);
+                        }}
+                        sx={{ mb: 2, width: 100 }}
                       />
                     </Box>
                   </Box>
+                )}
+                <Box>
+                  <Box
+                    sx={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <Button
+                      variant="contained"
+                      endIcon={<SaveIcon />}
+                      onClick={handleButtonSubmit}
+                      sx={{ width: "45%" }}
+                    >
+                      Save
+                    </Button>
+                  </Box>
                 </Box>
               </Box>
-            )}
+              {mode !== "Copy" && (
+                <Box>
+                  <Divider orientation="vertical" flexItem sx={{ mr: 2 }} />
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <Box>
+                      <Typography
+                        component="h1"
+                        variant="h6"
+                        color="inherit"
+                        noWrap
+                        sx={{ ml: 4, mb: 2.8 }}
+                      >
+                        Process Class Requirement
+                      </Typography>
+                      <Box sx={{ mb: 3 }}>
+                        <TransferList
+                          setChecked={setChecked}
+                          setLeft={setLeft}
+                          setRight={setRight}
+                          handleToggle={handleToggle}
+                          processClasses={processClasses}
+                          requiredProcessClasses={requiredProcessClasses}
+                          left={left}
+                          right={right}
+                          checked={checked}
+                          mode={mode}
+                          selected={selected}
+                          setMainProcessClass={setMainProcessClass}
+                          mainProcessClass={mainProcessClass}
+                        />
+                      </Box>
+                    </Box>
+                  </Box>
+                </Box>
+              )}
+            </Box>
           </Box>
-        </Box>
-      </Box>
-    </Modal>
+        </Paper>
+      </Grid>
+    </Grid>
   );
 };
 

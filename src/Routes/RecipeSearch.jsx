@@ -152,7 +152,6 @@ const RecipeSearch = () => {
                 selected={selected}
                 setSelected={setSelected}
                 handleDelete={handleDelete}
-                // handleSearch={handleSearch}
                 checked={checked}
                 setShowAllChecked={setShowAllChecked}
                 setPage={setPage}

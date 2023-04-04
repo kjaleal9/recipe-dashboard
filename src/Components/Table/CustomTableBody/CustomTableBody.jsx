@@ -17,12 +17,11 @@ const CustomTableBody = ({
   selected,
   setSelected,
   setMode,
-  setOpenNewModal,
+  setOpen,
   rows,
   page,
   setPage,
 }) => {
-
   const [rowsPerPage, setRowsPerPage] = useState(20);
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("RID");
@@ -47,7 +46,7 @@ const CustomTableBody = ({
   const handleDoubleClick = (event, row) => {
     setSelected(row);
     setMode("View");
-    setOpenNewModal(true);
+    setOpen(true);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -58,8 +57,6 @@ const CustomTableBody = ({
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
-  
 
   // const isSelected = row => selected.indexOf(row) !== -1;
   function isSelected(RID, version) {
