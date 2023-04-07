@@ -21,7 +21,7 @@ import CancelIcon from "@mui/icons-material/Cancel";
 
 import TransferList from "../Components/TransferList/TransferList";
 
-const EnhancedModal = (props) => {
+const RecipeEdit = (props) => {
   const { rows, setOpen, open, mode, setMode, refreshTable } = props;
 
   const { ...params } = useParams();
@@ -53,10 +53,18 @@ const EnhancedModal = (props) => {
   function initializeView() {
     console.time("Initialize View");
     const getRecipe = () =>
-      fetch(`/recipes/${params.RID}/${params.version}`)
+      fetch(`/recipes/${params.RID}/${params.Version}`)
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
+          setRID(data.RID);
+          setVersion(data.Version);
+          setDate(data.VersionDate);
+          setType(data.RecipeType);
+          setDescription(data.Description);
+          setStatus(data.Status);
+          setBSNom(data.BatchSizeNominal);
+          setBSMin(data.BatchSizeMin);
+          setBSMax(data.BatchSizeMax);
         });
     const getMaterials = () =>
       fetch("/materials").then((response) => response.json());
@@ -88,15 +96,6 @@ const EnhancedModal = (props) => {
         allRequiredProcessClasses,
       ]) => {
         setSelected(selectedRecipe);
-        setRID(selectedRecipe.RID);
-        setVersion(selectedRecipe.Version);
-        setDate(selectedRecipe.VersionDate);
-        setType(selectedRecipe.RecipeType);
-        setDescription(selectedRecipe.Description);
-        setStatus(selectedRecipe.Status);
-        setBSNom(selectedRecipe.BatchSizeNominal);
-        setBSMin(selectedRecipe.BatchSizeMin);
-        setBSMax(selectedRecipe.BatchSizeMax);
         setMaterials(allMaterials);
         setMaterialClasses(allMaterialClasses);
         setProcessClasses(allProcessClasses);
@@ -512,4 +511,4 @@ const EnhancedModal = (props) => {
   );
 };
 
-export default React.memo(EnhancedModal);
+export default React.memo(RecipeEdit);

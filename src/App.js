@@ -1,25 +1,34 @@
 import * as React from "react";
 import { Outlet, Link } from "react-router-dom";
+
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import MuiDrawer from "@mui/material/Drawer";
-import Box from "@mui/material/Box";
-import MuiAppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
-import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import Badge from "@mui/material/Badge";
-import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
-import MenuIcon from "@mui/icons-material/Menu";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import NotificationsIcon from "@mui/icons-material/Notifications";
+
+import {
+  Badge,
+  Box,
+  Container,
+  Divider,
+  Grid,
+  IconButton,
+  List,
+  MuiAppBar,
+  MuiDrawer,
+  Toolbar,
+  Typography,
+} from "@mui/material";
+
+import {
+  ChevronLeftIcon,
+  MenuIcon,
+  NotificationsIcon,
+} from "@mui/icons-material";
+
 import { mainListItems, secondaryListItems } from "./ListItems";
 
 const drawerWidth = 240;
 
+// Custom styling for app bar
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
@@ -38,6 +47,7 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
+// Custom styling for drawer
 const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
@@ -64,14 +74,16 @@ const Drawer = styled(MuiDrawer, {
   },
 }));
 
+// Change theme for app. "light" or "dark" mode
 const mdTheme = createTheme({
   palette: {
-    mode: "light",
+    mode: "dark",
   },
 });
 
 function App() {
   const [open, setOpen] = React.useState(false);
+
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -150,7 +162,7 @@ function App() {
           <Container maxWidth="xlg" sx={{ mt: 2, mb: 2 }}>
             <Grid container spacing={3}>
               <Grid item xs={12}>
-                <Outlet />
+                 <Outlet /> {/* !!!This is where the routes will render!!! */}
               </Grid>
             </Grid>
           </Container>

@@ -2,11 +2,14 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
+
 import App from "./App";
 import RecipeSearch from "./Routes/RecipeSearch";
 import RecipeEdit from "./Routes/RecipeEdit";
 import Materials from "./Routes/Materials";
 
+// Routes for frontend navigation
+// TODO: Create an error route
 const router = createBrowserRouter([
   {
     path: "/",
@@ -29,6 +32,7 @@ const router = createBrowserRouter([
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+
 root.render(
   <React.StrictMode>
     <RouterProvider router={router} />

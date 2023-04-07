@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import { Box, Paper, Skeleton, Typography, Grid } from "@mui/material";
 
+// TODO rename components
 import EnhancedTableToolbar from "../Components/Table/EnhancedTableToolbar/EnhancedTableToolbar";
 import EnhancedModal from "../Components/EnhancedModal/EnhancedModal";
 import DeleteDialog from "../Components/DeleteDialog/DeleteDialog";
