@@ -62,10 +62,6 @@ const RecipeSearch = () => {
       console.time("Get all data");
       const getRecipes = () =>
         fetch("/recipes").then((response) => response.json());
-
-      // const getLatestRecipes = () =>
-      //   fetch("/recipes/latest").then((response) => response.json());
-
       const getMaterials = () =>
         fetch("/materials").then((response) => response.json());
       const getMaterialClasses = () =>
@@ -74,6 +70,12 @@ const RecipeSearch = () => {
         fetch("/process-classes").then((response) => response.json());
       const getRequiredProcessClasses = () =>
         fetch("/process-classes/required").then((response) => response.json());
+      // const myPromise = new Promise((resolve, reject) => {
+      //   setTimeout(() => {
+      //     reject("foo");
+      //   }, 2300);
+      // });
+      // const testReject = () => myPromise;
 
       function getAllData() {
         return Promise.all([
@@ -82,26 +84,29 @@ const RecipeSearch = () => {
           getMaterialClasses(),
           getProcessClasses(),
           getRequiredProcessClasses(),
+          // testReject(),
         ]);
       }
 
-      getAllData().then(
-        ([
-          allRecipes,
-          allMaterials,
-          allMaterialClasses,
-          allProcessClasses,
-          allRequiredProcessClasses,
-        ]) => {
-          setFullDatabase(allRecipes);
-          setLatestVersionRecipes(groupRecipes(allRecipes));
-          setRows(groupRecipes(allRecipes));
-          setMaterials(allMaterials);
-          setMaterialClasses(allMaterialClasses);
-          setProcessClasses(allProcessClasses);
-          setRequiredProcessClasses(allRequiredProcessClasses);
-        }
-      );
+      getAllData()
+        .then(
+          ([
+            allRecipes,
+            allMaterials,
+            allMaterialClasses,
+            allProcessClasses,
+            allRequiredProcessClasses,
+          ]) => {
+            setFullDatabase(allRecipes);
+            setLatestVersionRecipes(groupRecipes(allRecipes));
+            setRows(groupRecipes(allRecipes));
+            setMaterials(allMaterials);
+            setMaterialClasses(allMaterialClasses);
+            setProcessClasses(allProcessClasses);
+            setRequiredProcessClasses(allRequiredProcessClasses);
+          }
+        )
+        .catch((err) => console.log(err, "uih"));
       console.timeEnd("Get all data");
       console.log(selected);
     }
@@ -142,7 +147,7 @@ const RecipeSearch = () => {
 
   return (
     <Grid container spacing={2} sx={{ height: "88vh" }}>
-      <Grid item xs={12} md={8}>
+      <Grid item xs={12} md={12} lg={6}>
         <Paper sx={{ height: "100%" }}>
           {fullDatabase.length > 0 ? (
             <Box>
@@ -207,7 +212,7 @@ const RecipeSearch = () => {
           )}{" "}
         </Paper>
       </Grid>
-      <Grid item xs={12} md={4}>
+      <Grid item xs={12} md={6}>
         <Paper sx={{ height: "100%" }}>
           {selected ? (
             <RecipeView selected={selected} />

@@ -111,16 +111,10 @@ const CustomTableBody = ({
                     <TableCell align="left" sx={{ width: "11ch" }}>
                       {new Date(row.VersionDate).toLocaleDateString()}
                     </TableCell>
-                    {/* <TableCell align="left" sx={{ width: "100px" }}>
-                              {row.RecipeType}
-                            </TableCell> */}
-                    <TableCell align="left" sx={{ width: "180px" }}>
-                      {row.Description}
-                    </TableCell>
                     <TableCell align="left" sx={{ width: "11ch" }}>
                       {row.Status}
                     </TableCell>
-                    <TableCell align="right" sx={{ width: "13ch" }}>
+                    <TableCell align="right" sx={{ width: "15ch" }}>
                       {row.ProductID}
                     </TableCell>
                     <TableCell align="left" sx={{ width: "180px" }}>

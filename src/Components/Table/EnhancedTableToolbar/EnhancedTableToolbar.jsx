@@ -69,7 +69,7 @@ const EnhancedTableToolbar = ({
         // width: '100%',
       }}
     >
-      <FormControl sx={{ m: 1, width: "15ch" }} variant="standard">
+      <FormControl sx={{ m: 1, width: "20ch" }} variant="standard">
         <InputLabel htmlFor="recipe-search">Recipe Search</InputLabel>
         <Input
           id="recipe-search"

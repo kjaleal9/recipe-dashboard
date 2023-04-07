@@ -33,12 +33,12 @@ const headCells = [
   //   disablePadding: false,
   //   label: 'Type',
   // },
-  {
-    id: "Description",
-    numeric: false,
-    disablePadding: false,
-    label: "Recipe Description",
-  },
+  // {
+  //   id: "Description",
+  //   numeric: false,
+  //   disablePadding: false,
+  //   label: "Recipe Description",
+  // },
   {
     id: "Status",
     numeric: false,
