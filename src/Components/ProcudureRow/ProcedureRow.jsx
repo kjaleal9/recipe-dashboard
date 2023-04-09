@@ -1,9 +1,11 @@
 import React from 'react';
 import {
-  ListItemButton,
+  ListItem,
   ListItemIcon,
   ListItemText,
+  Paper,
   TextField,
+  Tooltip,
   Typography,
 } from '@mui/material';
 
@@ -22,46 +24,47 @@ const ProcedureRow = props => {
   const { step, index } = props;
 
   return (
-    <ListItemButton
-      role='listitem'
-      button
-      sx={{
-        cursor: 'pointer',
-        border: '1px solid gray',
-        mx: 3,
-        height: '50px',
-      }}
-    >
-      <ListItemIcon>
-        <MenuIcon />
-      </ListItemIcon>
-      <Typography
-        component='h5'
-        variant='h5'
-        color='inherit'
-        noWrap
-        sx={{ mr: 2, width: '50px' }}
-      >
-        {index + 1}
-      </Typography>
-      <ListItemIcon>
-        {step.stepType === 'Allocate' ? (
-          <LockIcon />
-        ) : step.stepType === 'Run' ? (
-          <DirectionsRunIcon />
-        ) : step.stepType === 'Start' ? (
-          <PlayArrowIcon />
-        ) : step.stepType === 'Stop' ? (
-          <StopIcon />
-        ) : step.stepType === 'Deallocate' ? (
-          <LockOpenIcon />
-        ) : (
-          <ThumbUpIcon />
-        )}
-      </ListItemIcon>
-      <ListItemText id={index} primary={`${step.stepName}`} />
-      <TextField size='small' label={'Phase Parameter'}  />
-    </ListItemButton>
+    <Paper elevation={5} sx={{ m: 1 }}>
+      <Tooltip title={"Test tooltip"}>
+        <ListItem
+          role='listitem'
+          button
+          sx={{
+            cursor: 'pointer',
+            height: '35px',
+          }}
+        >
+          <ListItemIcon>
+            <MenuIcon />
+          </ListItemIcon>
+          <Typography
+            component='h5'
+            variant='h5'
+            color='inherit'
+            noWrap
+            sx={{ mr: 2, width: '50px' }}
+          >
+            {index + 1}
+          </Typography>
+          <ListItemIcon>
+            {step.stepType === 'Allocate' ? (
+              <LockIcon />
+            ) : step.stepType === 'Run' ? (
+              <DirectionsRunIcon />
+            ) : step.stepType === 'Start' ? (
+              <PlayArrowIcon />
+            ) : step.stepType === 'Stop' ? (
+              <StopIcon />
+            ) : step.stepType === 'Deallocate' ? (
+              <LockOpenIcon />
+            ) : (
+              <ThumbUpIcon />
+            )}
+          </ListItemIcon>
+          <ListItemText id={index} primary={`${step.stepName}`} />
+        </ListItem>
+      </Tooltip>
+    </Paper>
   );
 };
 

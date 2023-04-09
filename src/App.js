@@ -1,27 +1,25 @@
-import * as React from "react";
-import { Outlet } from "react-router-dom";
+import * as React from 'react';
+import { Outlet } from 'react-router-dom';
 
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 
-import {
-  Box,
-  Container,
-  Grid,
-  Toolbar,
-} from "@mui/material";
+import { Box, Container, Grid, Toolbar } from '@mui/material';
 
-import CustomAppBar from "./Components/CustomAppBar/CustomAppBar";
-import CustomDrawer from "./Components/CustomDrawer/CustomDrawer";
+import CustomAppBar from './Components/CustomAppBar/CustomAppBar';
+import CustomDrawer from './Components/CustomDrawer/CustomDrawer';
 
 // Custom styling for app bar
 
 // Change theme for app. "light" or "dark" mode
 const mdTheme = createTheme({
   palette: {
-    mode: "light",
+    mode: 'light',
+    appBar: { main: '#3D7C98',contrastText: '#fff', },
   },
 });
+
+console.log(mdTheme)
 
 function App() {
   const [open, setOpen] = React.useState(false);
@@ -30,29 +28,27 @@ function App() {
     setOpen(!open);
   };
 
+
   return (
     <ThemeProvider theme={mdTheme}>
-      <Box sx={{ display: "flex" }}>
+      <Box sx={{ display: 'flex' }}>
         <CssBaseline />
-        <CustomAppBar
-          open={open}
-          toggleDrawer={toggleDrawer}
-        />
+        <CustomAppBar open={open} toggleDrawer={toggleDrawer} />
         <CustomDrawer open={open} toggleDrawer={toggleDrawer} />
         <Box
-          component="main"
+          component='main'
           sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === "light"
-                ? theme.palette.grey[100]
+            backgroundColor: theme =>
+              theme.palette.mode === 'light'
+                ? theme.palette.grey[200]
                 : theme.palette.grey[900],
             flexGrow: 1,
-            height: "100vh",
-            overflow: "auto",
+            height: '100vh',
+            overflow: 'auto',
           }}
         >
           <Toolbar />
-          <Container maxWidth="xlg" sx={{ mt: 2, mb: 2 }}>
+          <Container maxWidth='xlg' sx={{ mt: 2, mb: 2 }}>
             <Grid container spacing={3}>
               <Grid item xs={12}>
                 <Outlet /> {/* !!!This is where the routes will render!!! */}

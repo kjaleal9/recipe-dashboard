@@ -7,6 +7,7 @@ import App from "./App";
 import RecipeSearch from "./Routes/RecipeSearch";
 import RecipeEdit from "./Routes/RecipeEdit";
 import Materials from "./Routes/Materials";
+import RecipeProcedure from "./Routes/RecipeProcedure";
 
 // Routes for frontend navigation
 // TODO: Create an error route
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
         path: "materials",
         element: <Materials />,
       },
+      {
+        path: "procedure",
+        element: <RecipeProcedure />,
+      },
     ],
   },
 ]);
@@ -34,7 +39,7 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
-  <React.StrictMode>
+
     <RouterProvider router={router} />
-  </React.StrictMode>
+
 );

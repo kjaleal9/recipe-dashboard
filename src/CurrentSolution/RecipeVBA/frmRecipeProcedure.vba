@@ -179,14 +179,6 @@ Exit Sub
         Exit Sub
     End If
 
-'''''MsgBox ThisDisplay.lUserCodes Like "*" & UserCode & "*" Or ThisDisplay.lUserCodes = "*"
-'''''If mCmbPClass <> CmbPClass.Column(0, CmbPClass.ListIndex) Then MsgBox "mCmbPClass "
-'''''If mCmbPtype <> CmbPtype.Column(0, CmbPtype.ListIndex) Then MsgBox "mCmbPtype "
-'''''If mCmbMaterial <> CmbMaterial.Column(0, CmbMaterial.ListIndex) Then MsgBox "mCmbMaterial "
-'''''If mTxtString <> TxtString Then MsgBox "mTxtString "
-'''''If mCmbTransition <> CmbTransition.Column(0, CmbTransition.ListIndex) Then MsgBox "mCmbTransition "
-'''''If mCmbStep <> CmbStep.Column(0, CmbStep.ListIndex) Then MsgBox "mCmbStep " & mCmbStep & ", " & CmbStep.Column(0, CmbStep.ListIndex)
-'''''If newstep Then MsgBox "newstep "
 
 '''''    CmdSave.Enabled = (ThisDisplay.lUserCodes Like "*" & UserCode & "*" Or ThisDisplay.lUserCodes = "*") And
     CmdSave.Enabled = (Application.LoadedDisplays.Item("footer").lUserCodes Like "*" & UserCode & "*" Or Application.LoadedDisplays.Item("footer").lUserCodes = "*") And _

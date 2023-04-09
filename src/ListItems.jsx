@@ -34,12 +34,14 @@ export const mainListItems = (
         <ListItemText primary="Materials" />
       </ListItemButton>
     </StyledLink>
+    <StyledLink to={"procedure"}>
     <ListItemButton>
       <ListItemIcon>
         <BarChartIcon />
       </ListItemIcon>
       <ListItemText primary="Reports" />
     </ListItemButton>
+    </StyledLink>
   </React.Fragment>
 );
 
