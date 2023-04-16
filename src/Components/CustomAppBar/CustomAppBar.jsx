@@ -4,7 +4,6 @@ import { Badge, IconButton, Toolbar, Typography } from '@mui/material';
 
 import MuiAppBar from '@mui/material/AppBar';
 import { styled } from '@mui/material/styles';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -27,23 +26,6 @@ const AppBar = styled(MuiAppBar, {
     }),
   }),
 }));
-
-const mdTheme = createTheme({
-  palette: {
-    // mode: 'light',
-    // mode: 'dark',
-    // primary: {
-    //   main: '#90caf9',
-    // },
-    // secondary: {
-    //   main: '#ce93d8',
-    // },
-    // background: {
-    //   default: '#121212',
-    //   paper: '#121212',
-    // },
-  },
-});
 
 const CustomAppBar = ({ open, toggleDrawer }) => {
   return (

@@ -101,7 +101,7 @@ const CustomTableBody = ({
                       component="th"
                       id={labelId}
                       scope="row"
-                      sx={{ width: "10ch" }}
+                      sx={{ width: "15ch" }}
                     >
                       {row.RID}
                     </TableCell>
@@ -109,7 +109,7 @@ const CustomTableBody = ({
                       {row.Version}
                     </TableCell>
                     <TableCell align="left" sx={{ width: "11ch" }}>
-                      {new Date(row.VersionDate).toLocaleDateString()}
+                      {new Date((row.VersionDate - 25569) * 86400 * 1000).toLocaleDateString()}
                     </TableCell>
                     <TableCell align="left" sx={{ width: "11ch" }}>
                       {row.Status}

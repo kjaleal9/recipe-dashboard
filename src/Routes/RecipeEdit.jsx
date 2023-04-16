@@ -53,23 +53,13 @@ const RecipeEdit = (props) => {
   function initializeView() {
     console.time("Initialize View");
     const getRecipe = () =>
-      fetch(`/recipes/${params.RID}/${params.Version}`)
-        .then((response) => response.json())
-        .then((data) => {
-          setRID(data.RID);
-          setVersion(data.Version);
-          setDate(data.VersionDate);
-          setType(data.RecipeType);
-          setDescription(data.Description);
-          setStatus(data.Status);
-          setBSNom(data.BatchSizeNominal);
-          setBSMin(data.BatchSizeMin);
-          setBSMax(data.BatchSizeMax);
-        });
+      fetch(`/recipes/${params.RID}/${params.Version}`).then((response) =>
+        response.json()
+      );
     const getMaterials = () =>
       fetch("/materials").then((response) => response.json());
     const getMaterialClasses = () =>
-      fetch("/material-classes").then((response) => response.json());
+      fetch("/material/classes").then((response) => response.json());
     const getProcessClasses = () =>
       fetch("/process-classes").then((response) => response.json());
     const getRequiredProcessClasses = () =>
@@ -95,7 +85,7 @@ const RecipeEdit = (props) => {
         allProcessClasses,
         allRequiredProcessClasses,
       ]) => {
-        setSelected(selectedRecipe);
+        setSelected(selectedRecipe[0]);
         setMaterials(allMaterials);
         setMaterialClasses(allMaterialClasses);
         setProcessClasses(allProcessClasses);
@@ -253,8 +243,6 @@ const RecipeEdit = (props) => {
                         !RID || rows.map((recipe) => recipe.RID).includes(RID)
                       }
                       type="string"
-                      // helperText={!RID && 'Please enter a valid name'}
-
                       onChange={(event) => {
                         setRID(event.target.value);
                       }}

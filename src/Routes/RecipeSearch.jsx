@@ -65,7 +65,7 @@ const RecipeSearch = () => {
       const getMaterials = () =>
         fetch("/materials").then((response) => response.json());
       const getMaterialClasses = () =>
-        fetch("/material-classes").then((response) => response.json());
+        fetch("/materials/classes").then((response) => response.json());
       const getProcessClasses = () =>
         fetch("/process-classes").then((response) => response.json());
       const getRequiredProcessClasses = () =>
@@ -140,14 +140,9 @@ const RecipeSearch = () => {
     setOpenDeleteDialog(true);
   };
 
-  // const handleSearch = (event) => {
-  //   console.log(event.target.value);
-  //   setFilter({ ...filter, search: event.target.value.toLowerCase() });
-  // };
-
   return (
     <Grid container spacing={2} sx={{ height: "88vh" }}>
-      <Grid item xs={12} md={12} lg={6}>
+      <Grid item xs={12} md={12} lg={9}>
         <Paper sx={{ height: "100%" }}>
           {fullDatabase.length > 0 ? (
             <Box>
@@ -212,10 +207,14 @@ const RecipeSearch = () => {
           )}{" "}
         </Paper>
       </Grid>
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={12} lg={3}>
         <Paper sx={{ height: "100%" }}>
           {selected ? (
-            <RecipeView selected={selected} />
+            <RecipeView
+              selected={selected}
+              processClasses={processClasses}
+              requiredProcessClasses={requiredProcessClasses}
+            />
           ) : (
             <Box
               sx={{

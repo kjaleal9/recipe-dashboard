@@ -117,11 +117,13 @@ Public Sub Init()
     sqlstring = "select id,ltrim(sitematerialalias) + ' ' + name as name from material where not sitematerialalias is null order by name"
     ListRefreshSQL rs, db, sqlstring, CmbMaterial, "id,name", 0
     If CmbMaterial.ListCount > 0 Then CmbMaterial.RemoveItem (CmbMaterial.ListCount - 1)
+    '''''''
 Exit Sub
         
 'Error message
 ErrHandler:
     MsgBox Now() & " VBA error Insert " & Err.Number & " " & Err.Description & " on display " & Name & " for Sub Init()"
+    '''
 End Sub
 
 Private Sub UserForm_Activate()
@@ -133,10 +135,7 @@ Private Sub UserForm_Activate()
 End Sub
 
 Private Sub CommandButton2_Click()
-
- 
    Dim rs As adodb.Recordset
-  
     
     Set rs = db.getRecords("insert into users(plc_id,name,active) output inserted.id values(199,'test',1)")
     If Not rs.EOF Then

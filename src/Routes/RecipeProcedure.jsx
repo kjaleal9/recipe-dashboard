@@ -1,5 +1,8 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+
+// TODO: Convert to react-beautiful-dnd to dndkit. rbdnd is no longer maintained.
+
 import {
   Box,
   Button,
@@ -123,6 +126,10 @@ const RecipeProcedure = () => {
     },
   ];
 
+  // Fetch steps from database
+  // Pull Recipe_RID Recipe_Version TPIBK_StepType_ID ProcessClassPhase_ID, Step UserString Material_ID ProcessClass_ID
+  // Assign a temporary ID 
+
   const [materials, setMaterials] = useState([]);
   const [materialClasses, setMaterialClasses] = useState([]);
   const [selected, setSelected] = useState('');
@@ -142,7 +149,7 @@ const RecipeProcedure = () => {
     const getMaterials = () =>
       fetch('/materials').then(response => response.json());
     const getMaterialClasses = () =>
-      fetch('/material-classes').then(response => response.json());
+      fetch('/materials/classes').then(response => response.json());
 
     function getAllData() {
       return Promise.all([getMaterials(), getMaterialClasses()]);
@@ -164,7 +171,7 @@ const RecipeProcedure = () => {
 
   return (
     <Grid container spacing={2} sx={{ height: '88vh' }}>
-      <Grid item xs={12} md={4} lg={4}>
+      <Grid item xs={12} md={4} lg={3}>
         <Paper sx={{ height: '100%' }}>
           <Box>
             <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -218,7 +225,7 @@ const RecipeProcedure = () => {
                     {steps.map((step, index) => {
                       return (
                         <Draggable
-                          key={step.stepName}
+                          key={step.ID}
                           draggableId={step.stepName}
                           index={index}
                         >
