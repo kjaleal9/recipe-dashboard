@@ -1,5 +1,5 @@
-import React, { Fragment, useEffect, useState } from 'react';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import React, { Fragment, useEffect, useState } from "react";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 // TODO: Convert to react-beautiful-dnd to dndkit. rbdnd is no longer maintained.
 
@@ -13,127 +13,37 @@ import {
   Typography,
   Toolbar,
   Tooltip,
-} from '@mui/material';
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  FormHelperText,
+} from "@mui/material";
 
-import ProcedureRow from '../Components/ProcudureRow/ProcedureRow';
+import ProcedureRow from "../Components/ProcudureRow/ProcedureRow";
 
-import AddBoxIcon from '@mui/icons-material/AddBox';
-import DeleteIcon from '@mui/icons-material/Delete';
+import AddBoxIcon from "@mui/icons-material/AddBox";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 // 20230224185204
 // http://localhost:5000/recipes/latest
 const RecipeProcedure = () => {
-  const procedure = {
-    steps: [
-      { stepName: 'T151 Allocate', stepType: 'Allocate' },
-      { stepName: 'T151 Agitation', stepType: 'Run' },
-      { stepName: 'R100 Allocate', stepType: 'Allocate' },
-      { stepName: 'R100 Empty', stepType: 'Start' },
-      { stepName: 'T151 Fill', stepType: 'Start' },
-    ],
-  };
-
-  const localDatabase = [
-    {
-      ID: '783',
-      Recipe_RID: 'BT_FullRec_Test',
-      Recipe_Version: '2',
-      TPIBK_StepType_ID: '8',
-      ProcessClassPhase_ID: null,
-      Step: '5',
-      UserString: null,
-      RecipeEquipmentTransition_Data_ID: null,
-      NextStep: '0',
-      Allocation_Type_ID: '0',
-      LateBinding: null,
-      Material_ID: null,
-      ProcessClass_ID: '377',
-    },
-    {
-      ID: '784',
-      Recipe_RID: 'BT_FullRec_Test',
-      Recipe_Version: '2',
-      TPIBK_StepType_ID: '2',
-      ProcessClassPhase_ID: '26',
-      Step: '10',
-      UserString: null,
-      RecipeEquipmentTransition_Data_ID: null,
-      NextStep: '0',
-      Allocation_Type_ID: '0',
-      LateBinding: null,
-      Material_ID: null,
-      ProcessClass_ID: '377',
-    },
-    {
-      ID: '785',
-      Recipe_RID: 'BT_FullRec_Test',
-      Recipe_Version: '2',
-      TPIBK_StepType_ID: '5',
-      ProcessClassPhase_ID: '28',
-      Step: '15',
-      UserString: null,
-      RecipeEquipmentTransition_Data_ID: null,
-      NextStep: '0',
-      Allocation_Type_ID: '0',
-      LateBinding: null,
-      Material_ID: null,
-      ProcessClass_ID: '377',
-    },
-    {
-      ID: '786',
-      Recipe_RID: 'BT_FullRec_Test',
-      Recipe_Version: '2',
-      TPIBK_StepType_ID: '8',
-      ProcessClassPhase_ID: '20',
-      Step: null,
-      UserString: null,
-      RecipeEquipmentTransition_Data_ID: null,
-      NextStep: '0',
-      Allocation_Type_ID: '0',
-      LateBinding: null,
-      Material_ID: null,
-      ProcessClass_ID: '388',
-    },
-    {
-      ID: '787',
-      Recipe_RID: 'BT_FullRec_Test',
-      Recipe_Version: '2',
-      TPIBK_StepType_ID: '2',
-      ProcessClassPhase_ID: '68',
-      Step: '25',
-      UserString: null,
-      RecipeEquipmentTransition_Data_ID: null,
-      NextStep: '0',
-      Allocation_Type_ID: '52',
-      LateBinding: null,
-      Material_ID: null,
-      ProcessClass_ID: '388',
-    },
-    {
-      ID: '788',
-      Recipe_RID: 'BT_FullRec_Test',
-      Recipe_Version: '2',
-      TPIBK_StepType_ID: '8',
-      ProcessClassPhase_ID: '35',
-      Step: null,
-      UserString: null,
-      RecipeEquipmentTransition_Data_ID: null,
-      NextStep: '0',
-      Allocation_Type_ID: '0',
-      LateBinding: null,
-      Material_ID: null,
-      ProcessClass_ID: '386',
-    },
-  ];
-
   // Fetch steps from database
   // Pull Recipe_RID Recipe_Version TPIBK_StepType_ID ProcessClassPhase_ID, Step UserString Material_ID ProcessClass_ID
-  // Assign a temporary ID 
+  // Assign a temporary ID
 
+  // Temporary
+  const [recipes, setRecipes] = useState([]);
+  const [recipeSelect, setRecipeSelect] = useState("");
+  const [recipeNames, setRecipeNames] = useState([]);
+  const [versionSelect, setVersionSelect] = useState("");
+
+  const [phases, setPhases] = useState([]);
   const [materials, setMaterials] = useState([]);
   const [materialClasses, setMaterialClasses] = useState([]);
-  const [selected, setSelected] = useState('');
-  const [steps, setSteps] = useState(procedure.steps);
+  const [selected, setSelected] = useState("");
+  const [steps, setSteps] = useState("");
+  const [selectedRecipe, setSelectedRecipe] = useState("");
 
   function handleOnDragEnd(result) {
     if (!result.destination) return;
@@ -145,66 +55,101 @@ const RecipeProcedure = () => {
     setSteps(items);
   }
 
+  // Move to route loader
   const refreshMaterials = () => {
+    const getRecipes = () =>
+      fetch("/recipes").then((response) => response.json());
+    const getPhases = () =>
+      fetch("/phases").then((response) => response.json());
     const getMaterials = () =>
-      fetch('/materials').then(response => response.json());
+      fetch("/materials").then((response) => response.json());
     const getMaterialClasses = () =>
-      fetch('/materials/classes').then(response => response.json());
+      fetch("/materials/classes").then((response) => response.json());
 
     function getAllData() {
-      return Promise.all([getMaterials(), getMaterialClasses()]);
+      return Promise.all([getRecipes(), getMaterials(), getMaterialClasses()]);
     }
 
     getAllData()
-      .then(([allMaterials, allMaterialClasses]) => {
+      .then(([recipes, phases, allMaterials, allMaterialClasses]) => {
+        setRecipes(recipes);
+        setPhases(phases);
         setMaterials(allMaterials);
         setMaterialClasses(allMaterialClasses);
       })
-      .catch(err => console.log(err, 'uih'));
+      .catch((err) => console.log(err, "uih"));
   };
+
   useEffect(() => {
     refreshMaterials();
   }, []);
 
+  useEffect(() => {
+    setVersionSelect("");
+  }, [recipeSelect]);
+
+  useEffect(() => {
+    setSteps(selectedRecipe.procedure);
+  }, [selectedRecipe]);
+
   const handleNewStep = () => {};
   const handleDeleteStep = () => {};
+  const procedureSearchButton = () => {
+    fetch(`/recipes/${recipeSelect}/${versionSelect}/procedure`).then(
+      (response) =>
+        response.json().then((data) => {
+          setSelectedRecipe(data);
+        })
+    );
+  };
+
+  const findPCP = (phaseID) => {
+    if (phaseID === "NULL") {
+      return "NULL";
+    } else {
+      const phase = selectedRecipe.processClassPhases.find(
+        (pcp) => pcp.ID === phaseID
+      );
+      return phase;
+    }
+  };
 
   return (
-    <Grid container spacing={2} sx={{ height: '88vh' }}>
+    <Grid container spacing={2} sx={{ height: "88vh" }}>
       <Grid item xs={12} md={4} lg={3}>
-        <Paper sx={{ height: '100%' }}>
+        <Paper sx={{ height: "88vh" }}>
           <Box>
-            <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
               <Typography
-                component='h1'
-                variant='h5'
-                color='inherit'
+                component="h1"
+                variant="h5"
+                color="inherit"
                 noWrap
-                sx={{ flexGrow: 1, alignSelf: 'center' }}
+                sx={{ flexGrow: 1, alignSelf: "center" }}
               >
                 Recipe Procedure
               </Typography>
 
-              <Box sx={{ display: 'flex', justifySelf: 'flex-end' }}>
-                <ButtonGroup color='primary' sx={{ justifySelf: 'flex-end' }}>
-                  <Tooltip title='New'>
+              <Box sx={{ display: "flex", justifySelf: "flex-end" }}>
+                <ButtonGroup color="primary" sx={{ justifySelf: "flex-end" }}>
+                  <Tooltip title="New">
                     <Box>
                       <Button
-                        variant='contained'
+                        variant="contained"
                         onClick={handleNewStep}
-                        sx={{ height: '100%' }}
+                        sx={{ height: "100%" }}
                       >
                         <AddBoxIcon />
                       </Button>
                     </Box>
                   </Tooltip>
-                  <Tooltip title='Delete'>
+                  <Tooltip title="Delete">
                     <Box>
                       <Button
-                        variant='contained'
-                        disabled={selected !== ''}
+                        variant="contained"
+                        disabled={selected !== ""}
                         onClick={handleDeleteStep}
-                        sx={{ height: '100%' }}
+                        sx={{ height: "100%" }}
                       >
                         <DeleteIcon />
                       </Button>
@@ -214,43 +159,116 @@ const RecipeProcedure = () => {
               </Box>
             </Toolbar>
             <Divider />
-            <DragDropContext onDragEnd={handleOnDragEnd}>
-              <Droppable droppableId='characters'>
-                {provided => (
-                  <Box
-                    className='characters'
-                    {...provided.droppableProps}
-                    ref={provided.innerRef}
-                  >
-                    {steps.map((step, index) => {
-                      return (
-                        <Draggable
-                          key={step.ID}
-                          draggableId={step.stepName}
-                          index={index}
-                        >
-                          {provided => (
-                            <Box
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
+            {steps && (
+              <Box sx={{ overflowY: "scroll", height: "80vh" }}>
+                <DragDropContext onDragEnd={handleOnDragEnd}>
+                  <Droppable droppableId="characters">
+                    {(provided) => (
+                      <div
+                        className="characters"
+                        {...provided.droppableProps}
+                        ref={provided.innerRef}
+                      >
+                        {steps.map((step, index) => {
+                          return (
+                            <Draggable
+                              key={step.ID}
+                              draggableId={step.ID}
+                              index={index}
                             >
-                              <ProcedureRow step={step} index={index} />
-                            </Box>
-                          )}
-                        </Draggable>
-                      );
-                    })}
-                    {provided.placeholder}
-                  </Box>
-                )}
-              </Droppable>
-            </DragDropContext>
+                              {(provided) => (
+                                <Box
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                >
+                                  <ProcedureRow
+                                    step={step}
+                                    processClassPhase={findPCP(
+                                      step.ProcessClassPhase_ID
+                                    )}
+                                    index={index}
+                                  />
+                                </Box>
+                              )}
+                            </Draggable>
+                          );
+                        })}
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+                </DragDropContext>
+              </Box>
+            )}
           </Box>
         </Paper>
       </Grid>
       <Grid item xs={12} md={4} lg={2}>
-        <Paper sx={{ height: '100%' }}></Paper>
+        <Paper sx={{ height: "100%" }}>
+          <FormControl sx={{ mb: 2, width: "auto", alignSelf: "center" }}>
+            <InputLabel id="demo-simple-select-helper-label">Recipe</InputLabel>
+            <Select
+              labelId="recipe-select-helper-label"
+              id="recipe-select-helper"
+              value={recipeSelect}
+              label="Recipe"
+              onChange={(event) => {
+                setRecipeSelect(event.target.value);
+              }}
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+
+              {[...new Set(recipes.map((recipe) => recipe.RID))].map((name) => {
+                return <MenuItem key={name} value={name}>{`${name}`}</MenuItem>;
+              })}
+            </Select>
+            <FormHelperText></FormHelperText>
+          </FormControl>
+          <FormControl sx={{ mb: 2, width: "auto", alignSelf: "center" }}>
+            <InputLabel id="demo-simple-select-helper-label">
+              Version
+            </InputLabel>
+            <Select
+              labelId="version-select-helper-label"
+              id="version-select-helper"
+              value={versionSelect}
+              label="Recipe"
+              disabled={!recipeSelect}
+              onChange={(event) => {
+                setVersionSelect(event.target.value);
+              }}
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+
+              {[
+                ...recipes
+                  .filter((recipe) => recipe.RID === recipeSelect)
+                  .map((recipe) => recipe.Version),
+              ].map((version) => {
+                return (
+                  <MenuItem
+                    key={version}
+                    value={version}
+                  >{`${version}`}</MenuItem>
+                );
+              })}
+            </Select>
+            <FormHelperText></FormHelperText>
+          </FormControl>
+          <Button
+            variant="contained"
+            alignSelf="center"
+            sx={{ m: 1, alignSelf: "center", width: "75%" }}
+            onClick={procedureSearchButton}
+          >
+            View
+          </Button>
+        </Paper>
       </Grid>
     </Grid>
   );
