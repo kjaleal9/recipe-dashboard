@@ -491,7 +491,7 @@ ErrHandler:
 End Sub
 
 Private Sub LoadTransitions()
-    sqlstring = "SELECT     TOP (100) PERCENT dbo.ProcessClassTransition.ID, dbo.ProcessClassTransition.Name " + _
+    sqlstring = "SELECT TOP (100) PERCENT dbo.ProcessClassTransition.ID, dbo.ProcessClassTransition.Name " + _
                 "FROM         dbo.ProcessClassTransition INNER JOIN " + _
                                       "dbo.RecipeEquipmentTransition ON dbo.ProcessClassTransition.ID = dbo.RecipeEquipmentTransition.ProcessClassTransition_ID INNER JOIN " + _
                                       "dbo.RecipeEquipmentTransition_Data ON " + _
