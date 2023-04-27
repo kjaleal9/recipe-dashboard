@@ -21,7 +21,7 @@ import LockIcon from "@mui/icons-material/Lock";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 
 const ProcedureRow = (props) => {
-  const { step, processClassPhase, index } = props;
+  const { step, index } = props;
 
   return (
     <Paper elevation={5} sx={{ m: 1 }}>
@@ -60,7 +60,7 @@ const ProcedureRow = (props) => {
               <ThumbUpIcon />
             )}
           </ListItemIcon> */}
-          <ListItemText id={step.ID} primary={processClassPhase.Name} />
+          <ListItemText id={step.ID} primary={step.Message} />
         </ListItem>
       </Tooltip>
     </Paper>

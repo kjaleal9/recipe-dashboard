@@ -95,7 +95,7 @@ const RecipeProcedure = () => {
   const handleNewStep = () => {};
   const handleDeleteStep = () => {};
   const procedureSearchButton = () => {
-    fetch(`/recipes/${recipeSelect}/${versionSelect}/procedure`).then(
+    fetch(`/recipes/procedure/${recipeSelect}/${versionSelect}`).then(
       (response) =>
         response.json().then((data) => {
           setSelectedRecipe(data);
@@ -115,10 +115,10 @@ const RecipeProcedure = () => {
   };
 
   return (
-    <Grid container spacing={2} sx={{ height: "88vh" }}>
-      <Grid item xs={12} md={4} lg={3}>
-        <Paper sx={{ height: "88vh" }}>
-          <Box>
+    <Grid container spacing={2}>
+      <Grid item xs={12} md={6} lg={4}>
+        <Paper>
+          <Box sx={{ height: "88vh" }}>
             <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
               <Typography
                 component="h1"
@@ -160,7 +160,7 @@ const RecipeProcedure = () => {
             </Toolbar>
             <Divider />
             {steps && (
-              <Box sx={{ overflowY: "scroll", height: "80vh" }}>
+              <Box sx={{ height: "80vh" }}>
                 <DragDropContext onDragEnd={handleOnDragEnd}>
                   <Droppable droppableId="characters">
                     {(provided) => (
@@ -168,6 +168,7 @@ const RecipeProcedure = () => {
                         className="characters"
                         {...provided.droppableProps}
                         ref={provided.innerRef}
+                        style={{ overflowY: "scroll", maxHeight: "100%" }}
                       >
                         {steps.map((step, index) => {
                           return (
@@ -182,13 +183,7 @@ const RecipeProcedure = () => {
                                   {...provided.draggableProps}
                                   {...provided.dragHandleProps}
                                 >
-                                  <ProcedureRow
-                                    step={step}
-                                    processClassPhase={findPCP(
-                                      step.ProcessClassPhase_ID
-                                    )}
-                                    index={index}
-                                  />
+                                  <ProcedureRow step={step} index={index} />
                                 </Box>
                               )}
                             </Draggable>
@@ -204,70 +199,96 @@ const RecipeProcedure = () => {
           </Box>
         </Paper>
       </Grid>
+      <Grid item xs={12} md={6} lg={6}>
+        <Paper>
+          <Box height={"88vh"}></Box>
+        </Paper>
+      </Grid>
       <Grid item xs={12} md={4} lg={2}>
-        <Paper sx={{ height: "100%" }}>
-          <FormControl sx={{ mb: 2, width: "auto", alignSelf: "center" }}>
-            <InputLabel id="demo-simple-select-helper-label">Recipe</InputLabel>
-            <Select
-              labelId="recipe-select-helper-label"
-              id="recipe-select-helper"
-              value={recipeSelect}
-              label="Recipe"
-              onChange={(event) => {
-                setRecipeSelect(event.target.value);
-              }}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-
-              {[...new Set(recipes.map((recipe) => recipe.RID))].map((name) => {
-                return <MenuItem key={name} value={name}>{`${name}`}</MenuItem>;
-              })}
-            </Select>
-            <FormHelperText></FormHelperText>
-          </FormControl>
-          <FormControl sx={{ mb: 2, width: "auto", alignSelf: "center" }}>
-            <InputLabel id="demo-simple-select-helper-label">
-              Version
-            </InputLabel>
-            <Select
-              labelId="version-select-helper-label"
-              id="version-select-helper"
-              value={versionSelect}
-              label="Recipe"
-              disabled={!recipeSelect}
-              onChange={(event) => {
-                setVersionSelect(event.target.value);
-              }}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-
-              {[
-                ...recipes
-                  .filter((recipe) => recipe.RID === recipeSelect)
-                  .map((recipe) => recipe.Version),
-              ].map((version) => {
-                return (
-                  <MenuItem
-                    key={version}
-                    value={version}
-                  >{`${version}`}</MenuItem>
-                );
-              })}
-            </Select>
-            <FormHelperText></FormHelperText>
-          </FormControl>
-          <Button
-            variant="contained"
-            alignSelf="center"
-            sx={{ m: 1, alignSelf: "center", width: "75%" }}
-            onClick={procedureSearchButton}
+        <Paper>
+          <Box
+            p={2}
+            display="flex"
+            flexDirection={"column"}
+            justifyContent={"space-around"}
+            gap={"6px"}
           >
-            View
-          </Button>
+            <Typography component="h1" variant="h6" color="inherit" noWrap>
+              Change Recipe
+            </Typography>
+
+            <FormControl width={"100%"}>
+              <InputLabel id="demo-simple-select-helper-label">
+                Recipe
+              </InputLabel>
+              <Select
+                labelId="recipe-select-helper-label"
+                id="recipe-select-helper"
+                value={recipeSelect}
+                label="Recipe"
+                onChange={(event) => {
+                  setRecipeSelect(event.target.value);
+                }}
+                MenuProps={{ PaperProps: { style: { maxHeight: 400 } } }}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+
+                {[...new Set(recipes.map((recipe) => recipe.RID))].map(
+                  (name) => {
+                    return (
+                      <MenuItem key={name} value={name}>{`${name}`}</MenuItem>
+                    );
+                  }
+                )}
+              </Select>
+              <FormHelperText></FormHelperText>
+            </FormControl>
+
+            <FormControl width={"50%"}>
+              <InputLabel id="demo-simple-select-helper-label">
+                Version
+              </InputLabel>
+              <Select
+                labelId="version-select-helper-label"
+                id="version-select-helper"
+                value={versionSelect}
+                label="Recipe"
+                disabled={!recipeSelect}
+                onChange={(event) => {
+                  setVersionSelect(event.target.value);
+                }}
+                MenuProps={{ PaperProps: { style: { maxHeight: 400 } } }}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+
+                {[
+                  ...recipes
+                    .filter((recipe) => recipe.RID === recipeSelect)
+                    .map((recipe) => recipe.Version)
+                    .sort((a, b) => a - b),
+                ].map((version) => {
+                  return (
+                    <MenuItem
+                      key={version}
+                      value={version}
+                    >{`${version}`}</MenuItem>
+                  );
+                })}
+              </Select>
+              <FormHelperText></FormHelperText>
+            </FormControl>
+            <Button
+              variant="contained"
+              sx={{ width: "100%" }}
+              onClick={procedureSearchButton}
+            >
+              Confirm
+            </Button>
+          </Box>
         </Paper>
       </Grid>
     </Grid>

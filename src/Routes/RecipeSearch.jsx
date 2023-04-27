@@ -70,12 +70,6 @@ const RecipeSearch = () => {
         fetch("/process-classes").then((response) => response.json());
       const getRequiredProcessClasses = () =>
         fetch("/process-classes/required").then((response) => response.json());
-      // const myPromise = new Promise((resolve, reject) => {
-      //   setTimeout(() => {
-      //     reject("foo");
-      //   }, 2300);
-      // });
-      // const testReject = () => myPromise;
 
       function getAllData() {
         return Promise.all([
@@ -108,7 +102,7 @@ const RecipeSearch = () => {
         )
         .catch((err) => console.log(err, "uih"));
       console.timeEnd("Get all data");
-      console.log(selected);
+        
     }
   };
 

@@ -684,23 +684,12 @@ Private Sub TxtStep_Change()
                 TxtStep.value = 0
             End If
         Else
-        '!!!!! Comment out in Factory Talk !!!!!
-            'If CInt(TxtStep.value) > CInt(ActiveWorkbook.Sheets("Setup").Range("b5").value) Then
-                'MsgBox "Out of Range"
-                'TxtStep.value = 0
-            'End If
         End If
     End If
     EnableSave 'Enable save button
 End Sub
 
 Public Sub LoadClass()
-    'sqlstring = "select id,name from processClass where TypeBatchKernel=1 order by name"
-'''''    sqlstring = "SELECT     RecipeEquipmentRequirement.ID, RecipeEquipmentRequirement.ProcessClass_Name, case when ROW_NUMBER() over(partition by RecipeEquipmentRequirement.ProcessClass_Name order by RecipeEquipmentRequirement.ProcessClass_Name)<2 then RecipeEquipmentRequirement.ProcessClass_Name else RecipeEquipmentRequirement.ProcessClass_Name+' #'+ltrim(ROW_NUMBER() over(partition by RecipeEquipmentRequirement.ProcessClass_Name order by RecipeEquipmentRequirement.ProcessClass_Name)) end as message,ProcessClass.id as pclass_Id, ProcessClass.Description As Description " & _
-                                     "FROM RecipeEquipmentRequirement INNER JOIN ProcessClass ON RecipeEquipmentRequirement.ProcessClass_Name = ProcessClass.Name " & _
-                                     "WHERE Recipe_RID= '" & BatchID & "' " & _
-                                     "and   Recipe_Version=" & BatchVersion
-    
     sqlstring = "SELECT RER.ID, RER.ProcessClass_Name, case when ROW_NUMBER() over(partition by RER.ProcessClass_Name order by RER.ProcessClass_Name)<2 then RER.ProcessClass_Name else RER.ProcessClass_Name+' #'+ltrim(ROW_NUMBER() over(partition by RER.ProcessClass_Name order by RER.ProcessClass_Name)) end as message,PC.id as pclass_Id, " & _
                 "case coalesce(Equipment_Name,PC.Description) When '' Then PC.Description Else Equipment_Name End As Equipment_Name " & _
                 "FROM RecipeEquipmentRequirement RER INNER JOIN ProcessClass PC ON RER.ProcessClass_Name = PC.Name " & _
