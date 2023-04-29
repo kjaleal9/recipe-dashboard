@@ -9,11 +9,37 @@ import {
   Paper,
 } from "@mui/material";
 
+import ProcessClassModal from "../ProcessClassModal/ProcessClassModal";
+import ProcedureModal from "../ProcedureModal/ProcedureModal";
+
 const RecipeView = (props) => {
   const { selected } = props;
+  const [openProcessClassModal, setOpenProcessClassModal] = useState(false);
+  const [openProcedureModal, setOpenProcedureModal] = useState(false);
+
+  const handleButtonProcessClasses = () => {
+    setOpenProcessClassModal(true);
+  };
+  const handleButtonProcedure = () => {
+    setOpenProcedureModal(true);
+  };
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", p: 3 }}>
+      <ProcessClassModal
+        selected={selected}
+        recipe={selected.RID}
+        version={selected.Version}
+        open={openProcessClassModal}
+        setOpenProcessClassModal={setOpenProcessClassModal}
+      />
+      <ProcedureModal
+        selected={selected}
+        recipe={selected.RID}
+        version={selected.Version}
+        open={openProcedureModal}
+        setOpenProcedureModal={setOpenProcedureModal}
+      />
       <Typography component="h1" variant="h5" align="center">
         {selected.RID}
       </Typography>
@@ -106,6 +132,7 @@ const RecipeView = (props) => {
           variant="contained"
           alignSelf="center"
           sx={{ m: 1, alignSelf: "center", width: "75%" }}
+          onClick={handleButtonProcessClasses}
         >
           Process Classes
         </Button>
@@ -113,6 +140,7 @@ const RecipeView = (props) => {
           variant="contained"
           alignSelf="center"
           sx={{ m: 1, alignSelf: "center", width: "75%" }}
+          onClick={handleButtonProcedure}
         >
           Procedure
         </Button>

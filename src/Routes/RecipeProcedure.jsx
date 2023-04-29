@@ -89,7 +89,8 @@ const RecipeProcedure = () => {
   }, [recipeSelect]);
 
   useEffect(() => {
-    setSteps(selectedRecipe.procedure);
+    setSteps(selectedRecipe);
+    console.log(selectedRecipe);
   }, [selectedRecipe]);
 
   const handleNewStep = () => {};

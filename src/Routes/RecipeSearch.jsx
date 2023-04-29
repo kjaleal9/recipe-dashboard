@@ -78,7 +78,6 @@ const RecipeSearch = () => {
           getMaterialClasses(),
           getProcessClasses(),
           getRequiredProcessClasses(),
-          // testReject(),
         ]);
       }
 
@@ -100,9 +99,8 @@ const RecipeSearch = () => {
             setRequiredProcessClasses(allRequiredProcessClasses);
           }
         )
-        .catch((err) => console.log(err, "uih"));
+        .catch((err) => console.log(err));
       console.timeEnd("Get all data");
-        
     }
   };
 
@@ -198,7 +196,7 @@ const RecipeSearch = () => {
               <Skeleton variant="rectangular" width={210} height={118} />
               <Typography>LOADING</Typography>
             </Box>
-          )}{" "}
+          )}
         </Paper>
       </Grid>
       <Grid item xs={12} md={12} lg={3}>
@@ -206,8 +204,6 @@ const RecipeSearch = () => {
           {selected ? (
             <RecipeView
               selected={selected}
-              processClasses={processClasses}
-              requiredProcessClasses={requiredProcessClasses}
             />
           ) : (
             <Box

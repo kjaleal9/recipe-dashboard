@@ -127,7 +127,7 @@ const EnhancedModal = (props) => {
   const navigate = useNavigate();
 
   const handleEdit = (event, selected) => {
-    navigate(`${RID}/${version}/edit`);
+    // navigate(`${RID}/${version}/edit`);
     setMode("Edit");
   };
   const handleButtonCancel = () => {
