@@ -1,19 +1,11 @@
-import React, { Fragment, useState, useEffect } from "react";
-import {
-  Box,
-  Typography,
-  Divider,
-  Chip,
-  Button,
-  Grid,
-  Paper,
-} from "@mui/material";
+import React, { useState } from "react";
+import { Box, Typography, Divider, Chip, Button } from "@mui/material";
 
-import ProcessClassModal from "../ProcessClassModal/ProcessClassModal";
-import ProcedureModal from "../ProcedureModal/ProcedureModal";
+import ProcessClassModal from "../Modals/ProcessClassModal/ProcessClassModal";
+import ProcedureModal from "../Modals/ProcedureModal/ProcedureModal";
 
 const RecipeView = (props) => {
-  const { selected } = props;
+  const { selected, setMode, setOpen } = props;
   const [openProcessClassModal, setOpenProcessClassModal] = useState(false);
   const [openProcedureModal, setOpenProcedureModal] = useState(false);
 
@@ -31,6 +23,8 @@ const RecipeView = (props) => {
         recipe={selected.RID}
         version={selected.Version}
         open={openProcessClassModal}
+        setOpen={setOpen}
+        setMode={setMode}
         setOpenProcessClassModal={setOpenProcessClassModal}
       />
       <ProcedureModal
@@ -38,6 +32,8 @@ const RecipeView = (props) => {
         recipe={selected.RID}
         version={selected.Version}
         open={openProcedureModal}
+        setOpen={setOpen}
+        setMode={setMode}
         setOpenProcedureModal={setOpenProcedureModal}
       />
       <Typography component="h1" variant="h5" align="center">

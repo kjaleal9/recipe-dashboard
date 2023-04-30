@@ -4,7 +4,7 @@ import { Box, Paper, Skeleton, Typography, Grid } from "@mui/material";
 
 // TODO rename components
 import EnhancedTableToolbar from "../Components/Table/EnhancedTableToolbar/EnhancedTableToolbar";
-import EnhancedModal from "../Components/EnhancedModal/EnhancedModal";
+import EnhancedModal from "../Components/Modals/EnhancedModal/EnhancedModal";
 import DeleteDialog from "../Components/DeleteDialog/DeleteDialog";
 import Snackbar from "../Components/SnackBar/SnackBar";
 import RecipeView from "../Components/RecipeView/RecipeView";
@@ -56,60 +56,53 @@ const RecipeSearch = () => {
       )
     );
   }
+  const getRecipes = () =>
+    fetch("/recipes").then((response) => response.json());
+  const getMaterials = () =>
+    fetch("/materials").then((response) => response.json());
+  const getMaterialClasses = () =>
+    fetch("/materials/classes").then((response) => response.json());
+  const getProcessClasses = () =>
+    fetch("/process-classes").then((response) => response.json());
+  const getRequiredProcessClasses = () =>
+    fetch("/process-classes/required").then((response) => response.json());
 
   const refreshTable = () => {
-    if (mode === "Search" || mode === "Procedure") {
-      console.time("Get all data");
-      const getRecipes = () =>
-        fetch("/recipes").then((response) => response.json());
-      const getMaterials = () =>
-        fetch("/materials").then((response) => response.json());
-      const getMaterialClasses = () =>
-        fetch("/materials/classes").then((response) => response.json());
-      const getProcessClasses = () =>
-        fetch("/process-classes").then((response) => response.json());
-      const getRequiredProcessClasses = () =>
-        fetch("/process-classes/required").then((response) => response.json());
+    console.time("Get all data");
 
-      function getAllData() {
-        return Promise.all([
-          getRecipes(),
-          getMaterials(),
-          getMaterialClasses(),
-          getProcessClasses(),
-          getRequiredProcessClasses(),
-        ]);
-      }
-
-      getAllData()
-        .then(
-          ([
-            allRecipes,
-            allMaterials,
-            allMaterialClasses,
-            allProcessClasses,
-            allRequiredProcessClasses,
-          ]) => {
-            setFullDatabase(allRecipes);
-            setLatestVersionRecipes(groupRecipes(allRecipes));
-            setRows(groupRecipes(allRecipes));
-            setMaterials(allMaterials);
-            setMaterialClasses(allMaterialClasses);
-            setProcessClasses(allProcessClasses);
-            setRequiredProcessClasses(allRequiredProcessClasses);
-          }
-        )
-        .catch((err) => console.log(err));
-      console.timeEnd("Get all data");
+    function getAllData() {
+      return Promise.all([
+        getRecipes(),
+        getMaterials(),
+        getMaterialClasses(),
+        getProcessClasses(),
+        getRequiredProcessClasses(),
+      ]);
     }
+
+    getAllData()
+      .then(
+        ([
+          allRecipes,
+          allMaterials,
+          allMaterialClasses,
+          allProcessClasses,
+          allRequiredProcessClasses,
+        ]) => {
+          setFullDatabase(allRecipes);
+          setLatestVersionRecipes(groupRecipes(allRecipes));
+          setRows(groupRecipes(allRecipes));
+          setMaterials(allMaterials);
+          setMaterialClasses(allMaterialClasses);
+          setProcessClasses(allProcessClasses);
+          setRequiredProcessClasses(allRequiredProcessClasses);
+        }
+      )
+      .catch((err) => console.log(err));
+    console.timeEnd("Get all data");
   };
 
-  useEffect(() => {
-    refreshTable();
-  }, [mode]);
-
-  // Table filter useEffect. Runs everytime the filter changes
-  useEffect(() => {
+  const filterRows = () => {
     console.time("Filter");
     const { showAll, status } = filter;
 
@@ -126,6 +119,15 @@ const RecipeSearch = () => {
     setRows(filteredRows);
 
     console.timeEnd("Filter");
+  };
+
+  useEffect(() => {
+    refreshTable();
+  }, []);
+
+  // Table filter useEffect. Runs everytime the filter changes
+  useEffect(() => {
+    filterRows();
   }, [filter]);
 
   const handleDelete = () => {
@@ -139,30 +141,30 @@ const RecipeSearch = () => {
           {fullDatabase.length > 0 ? (
             <Box>
               <EnhancedTableToolbar
+                selected={selected}
+                checked={checked}
+                filter={filter}
                 anyRowSelected={selected !== ""}
                 setOpen={setOpenNewModal}
                 setMode={setMode}
-                selected={selected}
                 setSelected={setSelected}
-                handleDelete={handleDelete}
-                checked={checked}
                 setShowAllChecked={setShowAllChecked}
                 setPage={setPage}
-                filter={filter}
                 setFilter={setFilter}
+                handleDelete={handleDelete}
               />
               <EnhancedModal
-                open={openNewModal}
-                setOpen={setOpenNewModal}
-                mode={mode}
-                setMode={setMode}
-                rows={rows}
                 selected={selected}
-                setSelected={setSelected}
+                mode={mode}
+                open={openNewModal}
+                rows={rows}
                 materials={materials}
                 materialClasses={materialClasses}
                 processClasses={processClasses}
                 requiredProcessClasses={requiredProcessClasses}
+                setOpen={setOpenNewModal}
+                setMode={setMode}
+                setSelected={setSelected}
                 refreshTable={refreshTable}
               />
               <DeleteDialog
@@ -204,6 +206,8 @@ const RecipeSearch = () => {
           {selected ? (
             <RecipeView
               selected={selected}
+              setMode={setMode}
+              setOpen={setOpenNewModal}
             />
           ) : (
             <Box

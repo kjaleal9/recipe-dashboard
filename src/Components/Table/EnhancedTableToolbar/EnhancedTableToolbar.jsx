@@ -18,6 +18,7 @@ import {
 
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import InventoryIcon from "@mui/icons-material/Inventory";
@@ -148,6 +149,18 @@ const EnhancedTableToolbar = ({
                 sx={{ height: "100%" }}
               >
                 <ContentCopyIcon />
+              </Button>
+            </Box>
+          </Tooltip>
+          <Tooltip title="Edit">
+            <Box>
+              <Button
+                variant="contained"
+                onClick={() => handleOpen("View")}
+                disabled={!anyRowSelected}  
+                sx={{ height: "100%" }}
+              >
+                <EditIcon />
               </Button>
             </Box>
           </Tooltip>

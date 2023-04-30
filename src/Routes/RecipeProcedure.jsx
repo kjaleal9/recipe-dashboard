@@ -23,6 +23,7 @@ import {
 import ProcedureRow from "../Components/ProcudureRow/ProcedureRow";
 
 import AddBoxIcon from "@mui/icons-material/AddBox";
+import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 // 20230224185204
@@ -95,6 +96,7 @@ const RecipeProcedure = () => {
 
   const handleNewStep = () => {};
   const handleDeleteStep = () => {};
+  const handleEditStep = () => {};
   const procedureSearchButton = () => {
     fetch(`/recipes/procedure/${recipeSelect}/${versionSelect}`).then(
       (response) =>
@@ -120,7 +122,14 @@ const RecipeProcedure = () => {
       <Grid item xs={12} md={6} lg={4}>
         <Paper>
           <Box sx={{ height: "88vh" }}>
-            <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Toolbar
+              sx={{
+                pl: { sm: 2 },
+                pr: { xs: 1, sm: 1 },
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
               <Typography
                 component="h1"
                 variant="h5"
@@ -132,7 +141,10 @@ const RecipeProcedure = () => {
               </Typography>
 
               <Box sx={{ display: "flex", justifySelf: "flex-end" }}>
-                <ButtonGroup color="primary" sx={{ justifySelf: "flex-end" }}>
+                <ButtonGroup
+                  color="primary"
+                  sx={{ justifySelf: "flex-end", mx: 2 , height:50}}
+                >
                   <Tooltip title="New">
                     <Box>
                       <Button
@@ -141,6 +153,17 @@ const RecipeProcedure = () => {
                         sx={{ height: "100%" }}
                       >
                         <AddBoxIcon />
+                      </Button>
+                    </Box>
+                  </Tooltip>
+                  <Tooltip title="Edit">
+                    <Box>
+                      <Button
+                        variant="contained"
+                        onClick={handleEditStep}
+                        sx={{ height: "100%" }}
+                      >
+                        <EditIcon />
                       </Button>
                     </Box>
                   </Tooltip>

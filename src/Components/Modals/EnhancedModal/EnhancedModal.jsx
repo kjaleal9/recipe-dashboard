@@ -13,11 +13,12 @@ import {
   TextField,
   Chip,
 } from "@mui/material";
+
 import SaveIcon from "@mui/icons-material/Save";
 import EditIcon from "@mui/icons-material/Edit";
 import CancelIcon from "@mui/icons-material/Cancel";
 
-import TransferList from "../TransferList/TransferList";
+import TransferList from "../../TransferList/TransferList";
 import { useNavigate } from "react-router-dom";
 
 const EnhancedModal = (props) => {
@@ -500,6 +501,16 @@ const EnhancedModal = (props) => {
 
               <Box>
                 <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                  {(mode === "Edit" || mode === "Copy") && (
+                    <Button
+                      variant="contained"
+                      endIcon={<CancelIcon />}
+                      onClick={handleButtonCancel}
+                      sx={{ width: "45%" }}
+                    >
+                      Cancel
+                    </Button>
+                  )}{" "}
                   {mode === "View" ? (
                     <Button
                       variant="contained"
@@ -518,16 +529,6 @@ const EnhancedModal = (props) => {
                       sx={{ width: "45%" }}
                     >
                       Save
-                    </Button>
-                  )}
-                  {(mode === "Edit" || mode === "Copy") && (
-                    <Button
-                      variant="contained"
-                      endIcon={<CancelIcon />}
-                      onClick={handleButtonCancel}
-                      sx={{ width: "45%" }}
-                    >
-                      Cancel
                     </Button>
                   )}
                 </Box>

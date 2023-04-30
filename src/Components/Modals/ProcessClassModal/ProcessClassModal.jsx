@@ -6,13 +6,24 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  requirePropFactory,
+  Chip,
+  Button,
+  Tooltip,
 } from "@mui/material";
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import EditIcon from "@mui/icons-material/Edit";
 
 const ProcessClassModal = (props) => {
-  const { recipe, version, open, setOpenProcessClassModal, selected } = props;
+  const {
+    recipe,
+    version,
+    open,
+    setOpenProcessClassModal,
+    selected,
+    setMode,
+    setOpen,
+  } = props;
 
   const [equipment, setEquipment] = useState([]);
   const [RPC, setRPC] = useState([]);
@@ -71,7 +82,12 @@ const ProcessClassModal = (props) => {
   const handleClose = () => {
     setOpenProcessClassModal(false);
     setExpanded(false);
-    
+  };
+
+  const handleEdit = (mode) => {
+    setMode(mode);
+    handleClose();
+    setOpen(true);
   };
 
   return (
@@ -90,15 +106,28 @@ const ProcessClassModal = (props) => {
             justifyContent: "space-between",
           }}
         >
-          <Typography
-            component="h1"
-            variant="h5"
-            color="inherit"
-            noWrap
-            sx={{ flexGrow: 1, alignSelf: "center" }}
-          >
-            Required Process Classes
-          </Typography>
+          <Box display={"flex"} sx={{ mb: 2 }}>
+            <Typography
+              component="h1"
+              variant="h5"
+              color="inherit"
+              noWrap
+              sx={{ flexGrow: 1 }}
+            >
+              Required Process Classes
+            </Typography>
+            <Tooltip title="Edit">
+              <Box>
+                <Button
+                  variant="contained"
+                  onClick={() => handleEdit("View")}
+                  sx={{ height: "100%" }}
+                >
+                  <EditIcon />
+                </Button>
+              </Box>
+            </Tooltip>
+          </Box>
           {RPC.map((processClass, index) => (
             <Accordion
               expanded={expanded === `panel${index}`}
@@ -109,10 +138,23 @@ const ProcessClassModal = (props) => {
                 aria-controls={`panel${index}a-content`}
                 id={`panel${index}a-header`}
               >
-                <Typography>
-                  {processClass.ProcessClass_Name} -{" "}
-                  {processClass.Equipment_Name}
-                </Typography>
+                <Box
+                  display="flex"
+                  justifyContent="space-between"
+                  sx={{ width: "100%" }}
+                >
+                  <Box>
+                    <Typography>
+                      {processClass.ProcessClass_Name} -{" "}
+                      {processClass.Equipment_Name}
+                    </Typography>
+                  </Box>
+                  <Box justifySelf={"flex-end"}>
+                    {processClass.IsMainBatchUnit && (
+                      <Chip color="info" label="Main Batch Unit" />
+                    )}
+                  </Box>
+                </Box>
               </AccordionSummary>
               <AccordionDetails>
                 {equipment
