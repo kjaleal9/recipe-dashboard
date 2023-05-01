@@ -132,6 +132,7 @@ const ProcessClassModal = (props) => {
             <Accordion
               expanded={expanded === `panel${index}`}
               onChange={handleExpand(`panel${index}`)}
+              key={`panel${index}`}
             >
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
@@ -162,7 +163,9 @@ const ProcessClassModal = (props) => {
                     (item) => +item.ProcessClass_ID === +processClass.PClass_ID
                   )
                   .map((filteredEquipment) => (
-                    <Typography>{filteredEquipment.Name}</Typography>
+                    <Typography key={filteredEquipment.Name}>
+                      {filteredEquipment.Name}
+                    </Typography>
                   ))}
               </AccordionDetails>
             </Accordion>

@@ -14,7 +14,7 @@ import CustomDrawer from './Components/CustomDrawer/CustomDrawer';
 // Change theme for app. "light" or "dark" mode
 const mdTheme = createTheme({
   palette: {
-    mode: 'light',
+    mode: 'dark',
     appBar: { main: '#3D7C98',contrastText: '#fff', },
   },
 });

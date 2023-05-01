@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
+import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 import ListSubheader from "@mui/material/ListSubheader";
 import ListAlt from "@mui/icons-material/ListAlt";
 import LunchDining from "@mui/icons-material/LunchDining";
@@ -37,9 +38,9 @@ export const mainListItems = (
     <StyledLink to={"procedure"}>
     <ListItemButton>
       <ListItemIcon>
-        <BarChartIcon />
+        <FormatListNumberedIcon />
       </ListItemIcon>
-      <ListItemText primary="Reports" />
+      <ListItemText primary="Procedures" />
     </ListItemButton>
     </StyledLink>
   </React.Fragment>

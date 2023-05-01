@@ -52,7 +52,7 @@ const RecipeSearch = () => {
 
     return Object.keys(groupedRecipes).map((key) =>
       groupedRecipes[key].reduce((max, recipe) =>
-        max["Version"] > recipe["Version"] ? max : recipe
+        +max["Version"] > +recipe["Version"] ? max : recipe
       )
     );
   }

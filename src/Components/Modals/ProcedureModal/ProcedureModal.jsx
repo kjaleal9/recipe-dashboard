@@ -28,8 +28,8 @@ const ProcedureModal = (props) => {
   const [procedure, setProcedure] = useState([]);
 
   const getProcedure = () =>
-    fetch(`/recipes/procedure/${recipe}/${version}`).then((response) =>
-      response.json()
+    fetch(`/recipes/procedure/${recipe}/${version}/condense`).then(
+      (response) => response.json()
     );
 
   useEffect(() => {

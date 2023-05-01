@@ -109,7 +109,7 @@ const CustomTableBody = ({
                       {row.Version}
                     </TableCell>
                     <TableCell align="left" sx={{ width: "11ch" }}>
-                      {new Date((row.VersionDate - 25569) * 86400 * 1000).toLocaleDateString()}
+                      {new Date((row.VersionDate)).toLocaleDateString()}
                     </TableCell>
                     <TableCell align="left" sx={{ width: "11ch" }}>
                       {row.Status}

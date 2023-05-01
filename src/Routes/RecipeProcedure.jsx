@@ -21,6 +21,7 @@ import {
 } from "@mui/material";
 
 import ProcedureRow from "../Components/ProcudureRow/ProcedureRow";
+import StepView from "../Components/StepView/StepView";
 
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import EditIcon from "@mui/icons-material/Edit";
@@ -45,6 +46,7 @@ const RecipeProcedure = () => {
   const [selected, setSelected] = useState("");
   const [steps, setSteps] = useState("");
   const [selectedRecipe, setSelectedRecipe] = useState("");
+  const [isProcedureEditable, setIsProcedureEditable] = useState(false);
 
   function handleOnDragEnd(result) {
     if (!result.destination) return;
@@ -139,54 +141,58 @@ const RecipeProcedure = () => {
               >
                 Recipe Procedure
               </Typography>
-
-              <Box sx={{ display: "flex", justifySelf: "flex-end" }}>
-                <ButtonGroup
-                  color="primary"
-                  sx={{ justifySelf: "flex-end", mx: 2 , height:50}}
-                >
-                  <Tooltip title="New">
-                    <Box>
-                      <Button
-                        variant="contained"
-                        onClick={handleNewStep}
-                        sx={{ height: "100%" }}
-                      >
-                        <AddBoxIcon />
-                      </Button>
-                    </Box>
-                  </Tooltip>
-                  <Tooltip title="Edit">
-                    <Box>
-                      <Button
-                        variant="contained"
-                        onClick={handleEditStep}
-                        sx={{ height: "100%" }}
-                      >
-                        <EditIcon />
-                      </Button>
-                    </Box>
-                  </Tooltip>
-                  <Tooltip title="Delete">
-                    <Box>
-                      <Button
-                        variant="contained"
-                        disabled={selected !== ""}
-                        onClick={handleDeleteStep}
-                        sx={{ height: "100%" }}
-                      >
-                        <DeleteIcon />
-                      </Button>
-                    </Box>
-                  </Tooltip>
-                </ButtonGroup>
-              </Box>
+              {isProcedureEditable && (
+                <Box sx={{ display: "flex", justifySelf: "flex-end" }}>
+                  <ButtonGroup
+                    color="primary"
+                    sx={{ justifySelf: "flex-end", mx: 2, height: 50 }}
+                  >
+                    <Tooltip title="New">
+                      <Box>
+                        <Button
+                          variant="contained"
+                          onClick={handleNewStep}
+                          sx={{ height: "100%" }}
+                        >
+                          <AddBoxIcon />
+                        </Button>
+                      </Box>
+                    </Tooltip>
+                    <Tooltip title="Edit">
+                      <Box>
+                        <Button
+                          variant="contained"
+                          onClick={handleEditStep}
+                          sx={{ height: "100%" }}
+                        >
+                          <EditIcon />
+                        </Button>
+                      </Box>
+                    </Tooltip>
+                    <Tooltip title="Delete">
+                      <Box>
+                        <Button
+                          variant="contained"
+                          disabled={selected !== ""}
+                          onClick={handleDeleteStep}
+                          sx={{ height: "100%" }}
+                        >
+                          <DeleteIcon />
+                        </Button>
+                      </Box>
+                    </Tooltip>
+                  </ButtonGroup>
+                </Box>
+              )}
             </Toolbar>
             <Divider />
             {steps && (
               <Box sx={{ height: "80vh" }}>
                 <DragDropContext onDragEnd={handleOnDragEnd}>
-                  <Droppable droppableId="characters">
+                  <Droppable
+                    droppableId="characters"
+                    isDropDisabled={!isProcedureEditable}
+                  >
                     {(provided) => (
                       <div
                         className="characters"
@@ -198,8 +204,9 @@ const RecipeProcedure = () => {
                           return (
                             <Draggable
                               key={step.ID}
-                              draggableId={step.ID}
+                              draggableId={step.ID.toString()}
                               index={index}
+                              isDragDisabled={!isProcedureEditable}
                             >
                               {(provided) => (
                                 <Box
@@ -225,7 +232,16 @@ const RecipeProcedure = () => {
       </Grid>
       <Grid item xs={12} md={6} lg={6}>
         <Paper>
-          <Box height={"88vh"}></Box>
+          <Box height={"88vh"}>
+            {selectedRecipe && (
+              <StepView
+                isProcedureEditable={isProcedureEditable}
+                setIsProcedureEditable={setIsProcedureEditable}
+                setSteps={setSteps}
+                selectedRecipe={selectedRecipe}
+              />
+            )}
+          </Box>
         </Paper>
       </Grid>
       <Grid item xs={12} md={4} lg={2}>
