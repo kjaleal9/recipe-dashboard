@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   Modal,
   Box,
@@ -15,53 +15,13 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import EditIcon from "@mui/icons-material/Edit";
 
 const ProcessClassModal = (props) => {
-  const {
-    recipe,
-    version,
-    open,
-    setOpenProcessClassModal,
-    selected,
-    setMode,
-    setOpen,
-  } = props;
+  const { RPC, equipment, open, setOpenProcessClassModal, setMode, setOpen } =
+    props;
 
-  const [equipment, setEquipment] = useState([]);
-  const [RPC, setRPC] = useState([]);
   const [expanded, setExpanded] = React.useState(false);
 
   const handleExpand = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
-  };
-
-  const getRPC = () =>
-    fetch(`/process-classes/required/${recipe}/${version}`).then((response) =>
-      response.json()
-    );
-
-  const getEquipment = () =>
-    fetch("/equipment").then((response) => response.json());
-
-  function getAllData() {
-    return Promise.all([getRPC(), getEquipment()]);
-  }
-
-  useEffect(() => {
-    getAllData()
-      .then(([requiredProcessClasses, requiredEquipment]) => {
-        setRPC(requiredProcessClasses);
-        setEquipment(requiredEquipment);
-      })
-      .catch((err) => console.log(err));
-  }, []);
-
-  useEffect(() => {
-    getRPC().then((data) => setRPC(data));
-  }, [selected]);
-
-  const filterEquipment = (processClassID) => {
-    return equipment.filter(
-      (equipment) => equipment.ProcessClass_ID === processClassID
-    );
   };
 
   const style = {

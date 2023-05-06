@@ -11,6 +11,7 @@ import RecipeView from "../Components/RecipeView/RecipeView";
 import CustomTableBody from "../Components/Table/CustomTableBody/CustomTableBody";
 
 const RecipeSearch = () => {
+  
   const [fullDatabase, setFullDatabase] = useState([]);
   const [latestVersion, setLatestVersionRecipes] = useState([]);
   const [selected, setSelected] = useState("");
@@ -205,6 +206,7 @@ const RecipeSearch = () => {
         <Paper sx={{ height: "100%" }}>
           {selected ? (
             <RecipeView
+          
               selected={selected}
               setMode={setMode}
               setOpen={setOpenNewModal}

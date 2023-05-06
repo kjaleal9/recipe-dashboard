@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   Modal,
   Box,
@@ -15,28 +15,7 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 
 const ProcedureModal = (props) => {
-  const {
-    recipe,
-    version,
-    open,
-    setOpenProcedureModal,
-    selected,
-    setOpen,
-    setMode,
-  } = props;
-
-  const [procedure, setProcedure] = useState([]);
-
-  const getProcedure = () =>
-    fetch(`/recipes/procedure/${recipe}/${version}/condense`).then(
-      (response) => response.json()
-    );
-
-  useEffect(() => {
-    getProcedure().then((data) => {
-      setProcedure(data);
-    });
-  }, [selected]);
+  const { open, setOpenProcedureModal, setOpen, setMode, procedure } = props;
 
   const style = {
     position: "absolute",
@@ -100,14 +79,6 @@ const ProcedureModal = (props) => {
               </Box>
             </Tooltip>
           </Box>
-          {/* 
-          <Box sx={{ overflowY: "scroll", height: 500 }}>
-            {procedure.map((step) => (
-              <Typography>
-                {step.Step} - {step.Message}
-              </Typography>
-            ))}
-          </Box> */}
           <Box sx={{ overflowY: "scroll", height: 500 }}>
             <Table stickyHeader aria-label="sticky table" size="small">
               <TableHead>
@@ -128,7 +99,7 @@ const ProcedureModal = (props) => {
                     <TableCell>{row.Message}</TableCell>
                   </TableRow>
                 ))}
-              </TableBody>{" "}
+              </TableBody>
             </Table>
           </Box>
         </Box>

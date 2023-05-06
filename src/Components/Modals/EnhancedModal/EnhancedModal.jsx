@@ -85,7 +85,6 @@ const EnhancedModal = (props) => {
       setRID("");
       setDescription("");
     }
-    console.log(selected);
     console.timeEnd("Initialize View");
   }
 

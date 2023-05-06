@@ -36,7 +36,7 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 const CustomDrawer = ({ open, toggleDrawer }) => {
-  console.log(+process.env.REACT_APP_DRAWER_WIDTH);
+
   return (
     <Drawer variant="permanent" open={open}>
       <Toolbar
