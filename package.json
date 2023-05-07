@@ -1,6 +1,5 @@
 {
   "name": "recipe-dashboard",
-  "allowedHosts[0]":"localhost",
   "proxy": "http://127.0.0.1:5000",
   "https": "true",
   "version": "0.1.0",

@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 // TODO: Convert to react-beautiful-dnd to dndkit. rbdnd is no longer maintained.
@@ -37,7 +37,6 @@ const RecipeProcedure = () => {
   // Temporary
   const [recipes, setRecipes] = useState([]);
   const [recipeSelect, setRecipeSelect] = useState("");
-  const [recipeNames, setRecipeNames] = useState([]);
   const [versionSelect, setVersionSelect] = useState("");
 
   const [phases, setPhases] = useState([]);

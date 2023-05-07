@@ -22,7 +22,7 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import TransferList from "../Components/TransferList/TransferList";
 
 const RecipeEdit = (props) => {
-  const { rows, setOpen, open, mode, setMode, refreshTable } = props;
+  const { rows, setOpen, mode, setMode, refreshTable } = props;
 
   const { ...params } = useParams();
 
@@ -39,8 +39,6 @@ const RecipeEdit = (props) => {
   const [checked, setChecked] = useState([]);
   const [left, setLeft] = useState([]);
   const [right, setRight] = useState([]);
-  const [status, setStatus] = useState("");
-  const [type, setType] = useState("");
   const [version, setVersion] = useState("");
   const [date, setDate] = useState("");
   const [invalidNames, setInvalidNames] = useState([]);
