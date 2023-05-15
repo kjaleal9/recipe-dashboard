@@ -18,10 +18,12 @@ import {
   Select,
   MenuItem,
   FormHelperText,
+  selectClasses,
 } from "@mui/material";
 
 import ProcedureRow from "../Components/ProcudureRow/ProcedureRow";
 import StepView from "../Components/StepView/StepView";
+import RecipeProcedureTable from "../Components/Table/CustomTableBody/RecipeProcedureTable";
 
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import EditIcon from "@mui/icons-material/Edit";
@@ -39,51 +41,69 @@ const RecipeProcedure = () => {
   const [recipeSelect, setRecipeSelect] = useState("");
   const [versionSelect, setVersionSelect] = useState("");
 
-  const [phases, setPhases] = useState([]);
+  const [phases, setPCPhases] = useState([]);
   const [materials, setMaterials] = useState([]);
   const [materialClasses, setMaterialClasses] = useState([]);
   const [selected, setSelected] = useState("");
   const [steps, setSteps] = useState("");
+  const [stepTypes, setStepTypes] = useState("");
+  const [equipment, setEquipment] = useState([]);
+
   const [selectedRecipe, setSelectedRecipe] = useState("");
+  const [selectedRER, setSelectedRER] = useState("");
   const [isProcedureEditable, setIsProcedureEditable] = useState(false);
 
-  function handleOnDragEnd(result) {
-    if (!result.destination) return;
-
-    const items = Array.from(steps);
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
-
-    setSteps(items);
-  }
+  console.log("another test");
 
   // Move to route loader
-  const refreshMaterials = () => {
+  const loadData = () => {
     const getRecipes = () =>
       fetch("/recipes").then((response) => response.json());
-    const getPhases = () =>
-      fetch("/phases").then((response) => response.json());
+    const getPCPhases = () =>
+      fetch("/process-classes/phases").then((response) => response.json());
+    const getStepTypes = () =>
+      fetch("/recipes/step-types").then((response) => response.json());
     const getMaterials = () =>
       fetch("/materials").then((response) => response.json());
     const getMaterialClasses = () =>
       fetch("/materials/classes").then((response) => response.json());
+    const getEquipment = () =>
+      fetch("/equipment").then((response) => response.json());
 
     function getAllData() {
-      return Promise.all([getRecipes(), getMaterials(), getMaterialClasses()]);
+      return Promise.all([
+        getRecipes(),
+        getPCPhases(),
+        getStepTypes(),
+        getMaterials(),
+        getMaterialClasses(),
+        getEquipment(),
+      ]);
     }
 
     getAllData()
-      .then(([recipes, phases, allMaterials, allMaterialClasses]) => {
-        setRecipes(recipes);
-        setPhases(phases);
-        setMaterials(allMaterials);
-        setMaterialClasses(allMaterialClasses);
-      })
+      .then(
+        ([
+          recipes,
+          pcPhases,
+          stepTypes,
+          allMaterials,
+          allMaterialClasses,
+          requiredEquipment,
+        ]) => {
+          setRecipes(recipes);
+          setPCPhases(pcPhases);
+          setStepTypes(stepTypes);
+          setMaterials(allMaterials);
+          setMaterialClasses(allMaterialClasses);
+          setEquipment(requiredEquipment);
+        }
+      )
       .catch((err) => console.log(err, "uih"));
   };
 
   useEffect(() => {
-    refreshMaterials();
+    loadData();
   }, []);
 
   useEffect(() => {
@@ -92,12 +112,12 @@ const RecipeProcedure = () => {
 
   useEffect(() => {
     setSteps(selectedRecipe);
-    console.log(selectedRecipe);
   }, [selectedRecipe]);
 
   const handleNewStep = () => {};
   const handleDeleteStep = () => {};
   const handleEditStep = () => {};
+
   const procedureSearchButton = () => {
     fetch(`/recipes/procedure/${recipeSelect}/${versionSelect}`).then(
       (response) =>
@@ -105,17 +125,43 @@ const RecipeProcedure = () => {
           setSelectedRecipe(data);
         })
     );
+    fetch(`/process-classes/required/${recipeSelect}/${versionSelect}`)
+      .then((response) => response.json())
+      .then((data) => setSelectedRER(data));
   };
 
-  const findPCP = (phaseID) => {
-    if (phaseID === "NULL") {
-      return "NULL";
-    } else {
-      const phase = selectedRecipe.processClassPhases.find(
-        (pcp) => pcp.ID === phaseID
-      );
-      return phase;
+  const handleClick = (event, step, row) => {
+    const selectedRow = `${selected.ID}-${selected.Message}` === step;
+    let newSelected = "";
+
+    if (selectedRow === false) {
+      newSelected = row;
     }
+
+    setSelected(newSelected);
+  };
+
+  const onDragEnd = (result) => {
+    if (!result.destination) {
+      return;
+    }
+    const newItems = Array.from(steps);
+    const [removed] = newItems.splice(result.source.index, 1);
+    newItems.splice(result.destination.index, 0, removed);
+    setSteps(newItems);
+  };
+
+  function isSelected(step) {
+    return selected.Step === step;
+  }
+
+  const handleCancelButton = () => {
+    setIsProcedureEditable(false);
+    setSteps(selectedRecipe);
+  };
+
+  const handleEditProcedureButton = () => {
+    setIsProcedureEditable(true);
   };
 
   return (
@@ -140,6 +186,33 @@ const RecipeProcedure = () => {
               >
                 Recipe Procedure
               </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-around",
+                }}
+              >
+                {isProcedureEditable ? (
+                  <Button
+                    variant="contained"
+                    alignSelf="center"
+                    sx={{ m: 1, alignSelf: "center", width: "75%" }}
+                    onClick={handleCancelButton}
+                  >
+                    Cancel
+                  </Button>
+                ) : (
+                  <Button
+                    variant="contained"
+                    alignSelf="center"
+                    sx={{ m: 1, alignSelf: "center", width: "75%" }}
+                    onClick={handleEditProcedureButton}
+                  >
+                    Edit Procedure
+                  </Button>
+                )}
+              </Box>
               {isProcedureEditable && (
                 <Box sx={{ display: "flex", justifySelf: "flex-end" }}>
                   <ButtonGroup
@@ -172,7 +245,7 @@ const RecipeProcedure = () => {
                       <Box>
                         <Button
                           variant="contained"
-                          disabled={selected !== ""}
+                          disabled={selected === ""}
                           onClick={handleDeleteStep}
                           sx={{ height: "100%" }}
                         >
@@ -186,45 +259,13 @@ const RecipeProcedure = () => {
             </Toolbar>
             <Divider />
             {steps && (
-              <Box sx={{ height: "80vh" }}>
-                <DragDropContext onDragEnd={handleOnDragEnd}>
-                  <Droppable
-                    droppableId="characters"
-                    isDropDisabled={!isProcedureEditable}
-                  >
-                    {(provided) => (
-                      <div
-                        className="characters"
-                        {...provided.droppableProps}
-                        ref={provided.innerRef}
-                        style={{ overflowY: "scroll", maxHeight: "100%" }}
-                      >
-                        {steps.map((step, index) => {
-                          return (
-                            <Draggable
-                              key={step.ID}
-                              draggableId={step.ID.toString()}
-                              index={index}
-                              isDragDisabled={!isProcedureEditable}
-                            >
-                              {(provided) => (
-                                <Box
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                >
-                                  <ProcedureRow step={step} index={index} />
-                                </Box>
-                              )}
-                            </Draggable>
-                          );
-                        })}
-                        {provided.placeholder}
-                      </div>
-                    )}
-                  </Droppable>
-                </DragDropContext>
-              </Box>
+              <RecipeProcedureTable
+                rows={steps}
+                onDragEnd={onDragEnd}
+                handleClick={handleClick}
+                isSelected={isSelected}
+                isProcedureEditable={isProcedureEditable}
+              />
             )}
           </Box>
         </Paper>
@@ -238,6 +279,10 @@ const RecipeProcedure = () => {
                 setIsProcedureEditable={setIsProcedureEditable}
                 setSteps={setSteps}
                 selectedRecipe={selectedRecipe}
+                selectedRER={selectedRER}
+                selectedStep={selected}
+                equipment={equipment}
+                phases={phases}
               />
             )}
           </Box>
