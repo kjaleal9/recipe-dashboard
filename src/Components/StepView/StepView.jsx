@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Typography, Divider, Chip, Button } from "@mui/material";
 
-const RecipeView = (props) => {
+const StepView = (props) => {
   const {
     isProcedureEditable,
     setIsProcedureEditable,
@@ -13,7 +13,25 @@ const RecipeView = (props) => {
     selectedStep,
   } = props;
 
+  const [parameters, setParameters] = useState([]);
+
   console.log(selectedStep);
+
+  useEffect(() => {
+    console.time("get parameters");
+    setParameters([]);
+    if ([1, 2, 3, 4, 5].includes(selectedStep.TPIBK_StepType_ID)) {
+      fetch(
+        `/parameters/${selectedStep.ID}/${selectedStep.ProcessClassPhase_ID}`
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          setParameters(data.recordset);
+          console.log(data.recordset);
+        });
+    }
+    console.timeEnd("get parameters");
+  }, [selectedStep]);
 
   const testJSX = [
     { ID: 1, jsxObject: <Typography>This is a test for: ID 1</Typography> },
@@ -32,14 +50,24 @@ const RecipeView = (props) => {
     <Box sx={{ display: "flex", flexDirection: "column", p: 3 }}>
       {selectedStep && (
         <Box>
-          {
-            testJSX.find((item) => item.ID === selectedStep.TPIBK_StepType_ID)
-              .jsxObject
-          }
+          <Box>
+            {
+              testJSX.find((item) => item.ID === selectedStep.TPIBK_StepType_ID)
+                .jsxObject
+            }
+          </Box>
+          <Box>
+            {parameters &&
+              parameters.map((parameter) => (
+                <Typography>
+                  {parameter.Name} - {parameter.Value}
+                </Typography>
+              ))}
+          </Box>
         </Box>
       )}
     </Box>
   );
 };
 
-export default RecipeView;
+export default StepView;

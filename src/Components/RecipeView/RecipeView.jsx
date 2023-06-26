@@ -16,7 +16,7 @@ const RecipeView = (props) => {
   const handleButtonProcessClasses = () => {
     setOpenProcessClassModal(true);
   };
-  
+
   const handleButtonProcedure = () => {
     setOpenProcedureModal(true);
   };
@@ -66,7 +66,9 @@ const RecipeView = (props) => {
   }, [selected]);
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", p: 3 }}>
+    <Box
+      sx={{ display: "flex", flexDirection: "column", p: 3, maxHeight: "88vh" }}
+    >
       {loading ? (
         <Typography>Loading</Typography>
       ) : (
@@ -204,9 +206,16 @@ const RecipeView = (props) => {
             >
               Procedure
             </Button>
+            <Button
+              variant="contained"
+              sx={{ m: 1, width: "75%" }}
+              onClick={handleButtonProcedure}
+            >
+              Trains
+            </Button>
           </Box>
           <Divider sx={{ m: 2 }} light />
-          <Box display="flex" flexDirection="column">
+          <Box display="flex" flexDirection="column" height={400}>
             <Typography
               component="h1"
               variant="h6"
@@ -218,19 +227,37 @@ const RecipeView = (props) => {
               component="p"
               variant="p"
               color="inherit"
-              sx={{ alignSelf: "center", pb: 0.25 }}
+              sx={{
+                alignSelf: "center",
+                pb: 0.25,
+                overflowY: "scroll",
+                height:'auto'
+              }}
             >
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-              Excepturi, quod optio doloribus exercitationem libero aut quis
-              laborum illum ipsa provident, aperiam doloremque ex esse deleniti
-              temporibus harum voluptatibus. Deserunt minima laboriosam aperiam,
-              ipsum est perferendis suscipit! Vel, iusto modi! Consequuntur
-              ratione ex voluptates sunt dolore veniam nulla modi qui ea
-              eligendi libero fuga, minima nam? Officiis cum nihil, laborum
-              facilis dignissimos culpa natus consequuntur sapiente nobis,
-              ratione quisquam minima minus delectus similique praesentium
-              aperiam obcaecati eligendi accusantium officia harum veritatis
-              dolorum at odit neque?
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+              Accusamus dolor itaque accusantium cupiditate nam eaque, ut
+              pariatur incidunt impedit unde quae totam tempore officia alias
+              quidem fugiat dolorum? Nulla laudantium aliquam magnam repellendus
+              ullam sequi nesciunt natus nisi adipisci odio, fugiat porro
+              perferendis voluptatum ex beatae, modi minus quam repudiandae
+              sapiente tenetur amet iusto eum accusamus? Laudantium hic sit
+              alias aut necessitatibus inventore esse. Velit ea quos blanditiis
+              labore, atque nam obcaecati quaerat error distinctio, porro
+              accusantium reprehenderit eum nostrum a repellat, ad ipsum placeat
+              fugiat animi esse nisi sit odio vero sapiente. Assumenda,
+              voluptate nesciunt incidunt tempore ad adipisci pariatur placeat
+              consequuntur maiores voluptas necessitatibus dignissimos deserunt
+              aut suscipit quae omnis at minus officiis dolorum quibusdam harum
+              minima. Iste, eius soluta quia modi est harum magnam, similique,
+              natus adipisci nulla sint nam aperiam sed veritatis debitis
+              reiciendis minus eligendi ut dolorum temporibus ad. Accusamus quos
+              libero quam eveniet sed id rem nisi, necessitatibus ipsum cumque
+              amet temporibus atque cupiditate possimus debitis, provident
+              soluta perferendis voluptate. Voluptatibus quam nobis omnis! Autem
+              dolorum veniam perferendis aperiam corrupti beatae similique
+              velit, explicabo asperiores commodi tempora atque, optio voluptas
+              error voluptates excepturi. Aspernatur eum laborum nihil
+              doloremque cumque facere pariatur impedit quasi ducimus!
             </Typography>
           </Box>
         </Box>

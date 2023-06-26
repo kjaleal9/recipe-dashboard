@@ -96,7 +96,6 @@ const RecipeSearch = () => {
           setMaterialClasses(allMaterialClasses);
           setProcessClasses(allProcessClasses);
           setRequiredProcessClasses(allRequiredProcessClasses);
-          
         }
       )
       .catch((err) => console.log(err));

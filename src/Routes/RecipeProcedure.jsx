@@ -29,6 +29,8 @@ import AddBoxIcon from "@mui/icons-material/AddBox";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
+
+
 // 20230224185204
 // http://localhost:5000/recipes/latest
 const RecipeProcedure = () => {
@@ -52,8 +54,6 @@ const RecipeProcedure = () => {
   const [selectedRecipe, setSelectedRecipe] = useState("");
   const [selectedRER, setSelectedRER] = useState("");
   const [isProcedureEditable, setIsProcedureEditable] = useState(false);
-
-  console.log("another test");
 
   // Move to route loader
   const loadData = () => {
