@@ -7,7 +7,8 @@ import App from "./App";
 import RecipeSearch from "./Routes/RecipeSearch";
 import RecipeEdit from "./Routes/RecipeEdit";
 import Materials from "./Routes/Materials";
-import RecipeProcedure from "./Routes/RecipeProcedure";
+import RecipeProcedure from "./Routes/RecipeProcedure"; 
+import ErrorLog from "./Routes/ErrorLog"; 
 
 // Routes for frontend navigation
 // TODO: Create an error route
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
       {
         path: "procedure",
         element: <RecipeProcedure />,
+      },
+      {
+        path: "errorLog",
+        element: <ErrorLog />,
       },
     ],
   },

@@ -43,6 +43,14 @@ export const mainListItems = (
       <ListItemText primary="Procedures" />
     </ListItemButton>
     </StyledLink>
+    <StyledLink to={"errorLog"}>
+    <ListItemButton>
+      <ListItemIcon>
+        <FormatListNumberedIcon />
+      </ListItemIcon>
+      <ListItemText primary="Errors" />
+    </ListItemButton>
+    </StyledLink>
   </React.Fragment>
 );
 
